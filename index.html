@@ -14,18 +14,38 @@
       --soft:#ecf0f1;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Cinzel',serif}
+    html,body{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}
     body{
       background:radial-gradient(circle at center,var(--gray) 0%,var(--black) 100%);
         color:var(--soft);
-        min-height:100vh;
         display:flex;
         flex-direction:column;
         align-items:center;
         justify-content:center;
-        overflow:hidden;
+        min-height:100vh;
+        position:relative;
     }
 
-    /* ----- PARLAK YAZI ----- */
+    /* ---------- YENİLEME BUTONU ---------- */
+    .refresh-btn{
+        position:fixed;
+        bottom:20px;
+        right:20px;
+        width:56px;
+        height:56px;
+        border-radius:50%;
+        background:var(--blue);
+        color:#fff;
+        border:none;
+        font-size:24px;
+        cursor:pointer;
+        box-shadow:0 4px 12px rgba(0,0,0,.4);
+        z-index:1000;
+        transition:transform .2s;
+    }
+    .refresh-btn:hover{transform:scale(1.1)}
+
+    /* ---------- PARLAK YAZI ---------- */
     .glitter-text{
         font-size:clamp(2.5rem,8vw,5rem);
         font-weight:700;
@@ -44,7 +64,7 @@
         100%{background-position:0% 50%}
     }
 
-    /* ----- FOTO KUTUSU ----- */
+    /* ---------- FOTO KUTUSU ---------- */
     .photo-box{
         width:clamp(200px,40vw,350px);
         aspect-ratio:1;
@@ -66,7 +86,7 @@
         50%{filter:brightness(1.15) drop-shadow(0 0 20px var(--green))}
     }
 
-    /* ----- ARKA PLAN PARÇACIK ----- */
+    /* ---------- PARÇACIK ARKA PLAN ---------- */
     #particles{
         position:fixed;
         inset:0;
@@ -74,7 +94,7 @@
         pointer-events:none;
     }
 
-    /* ----- FOOTER ----- */
+    /* ---------- FOOTER ---------- */
     footer{
         position:absolute;
         bottom:10px;
@@ -92,12 +112,15 @@
 
 <!-- #PHOTO-HERE: İstediğin fotoğraf linkini src="#" yerine yapıştır -->
 <div class="photo-box">
-  <img class="photo" src="https://i.pinimg.com/736x/f8/15/62/f81562a31a67ad6ccc45848fc46bb623.jpg" alt="Fotoğraf">
+  <img class="photo" src="https://i.pinimg.com/736x/f8/3d/ec/f83decedebb35816b6cc5bffafc3b61f.jpg" alt="Fotoğraf">
 </div>
 
 <footer>
   Created by Rüzgar Seyit Göngör
 </footer>
+
+<!-- YENİLEME BUTONU (MOBİL) -->
+<button class="refresh-btn" onclick="location.reload()" title="Yenile">↻</button>
 
 <!-- ---------- PARÇACIK ARKA PLAN ---------- -->
 <canvas id="particles"></canvas>
