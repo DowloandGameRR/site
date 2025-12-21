@@ -2,99 +2,143 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Nova İtiraf</title>
+  <title>Rüzgar Seyit Göngör</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
     :root{
-      --blue:#3498db;
+      --green:#27ae60;
+      --yellow:#f1c40f;
       --black:#0d0d0d;
-      --gray:#1a1a1a;
-      --soft:#bdc3c7;
-      --text:#ecf0f1;
+      --gray:#2c2c2c;
+      --soft:#ecf0f1;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',sans-serif}
-    body{background:var(--black);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Cinzel',serif}
+    body{
+      background:radial-gradient(circle at center,var(--gray) 0%,var(--black) 100%);
+        color:var(--soft);
+        min-height:100vh;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        overflow:hidden;
+    }
 
-    /* ---------- HEADER ---------- */
-    header{text-align:center;padding:20px;font-size:28px;font-weight:600;background:var(--gray);border-bottom:2px solid var(--blue)}
-    .logo{background:linear-gradient(45deg,var(--blue),#5dade2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    /* ----- PARLAK YAZI ----- */
+    .glitter-text{
+        font-size:clamp(2.5rem,8vw,5rem);
+        font-weight:700;
+        letter-spacing:4px;
+        text-align:center;
+        background:linear-gradient(45deg,var(--green),var(--yellow),var(--green));
+        background-size:200% 200%;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        animation:shine 3s infinite linear;
+        filter:drop-shadow(0 0 8px var(--yellow));
+    }
+    @keyframes shine{
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
 
-    /* ---------- FORM ---------- */
-    .form-card{background:var(--gray);border:1px solid var(--blue);border-radius:12px;padding:20px;margin:20px auto;width:90%;max-width:600px}
-    .form-title{margin-bottom:10px;font-size:18px}
-    .form-textarea{width:100%;min-height:120px;padding:12px;background:#0d0d0d;border:1px solid var(--blue);border-radius:6px;color:var(--text);resize:vertical}
-    .form-btn{width:100%;padding:12px;margin-top:10px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:filter .2s}
-    .form-btn:hover{filter:brightness(1.1)}
+    /* ----- FOTO KUTUSU ----- */
+    .photo-box{
+        width:clamp(200px,40vw,350px);
+        aspect-ratio:1;
+        border:2px solid var(--yellow);
+        border-radius:16px;
+        overflow:hidden;
+        margin:30px 0;
+        position:relative;
+        box-shadow:0 0 20px var(--yellow),inset 0 0 20px rgba(0,0,0,.5);
+    }
+    .photo{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        animation:photoPulse 4s infinite ease-in-out;
+    }
+    @keyframes photoPulse{
+        0%,100%{filter:brightness(1) drop-shadow(0 0 10px var(--yellow))}
+        50%{filter:brightness(1.15) drop-shadow(0 0 20px var(--green))}
+    }
 
-    /* ---------- İTİRAFLAR ---------- */
-    .itiraf-list{margin:20px auto;width:90%;max-width:600px;display:flex;flex-direction:column;gap:15px}
-    .itiraf-card{background:var(--gray);border:1px solid var(--blue);border-radius:8px;padding:15px;animation:fadeIn .5s ease}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .itiraf-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;color:var(--soft)}
-    .itiraf-text{font-size:15px;line-height:1.5}
+    /* ----- ARKA PLAN PARÇACIK ----- */
+    #particles{
+        position:fixed;
+        inset:0;
+        z-index:-1;
+        pointer-events:none;
+    }
 
-    /* ---------- FOOTER ---------- */
-    footer{text-align:center;padding:14px;font-size:12px;color:var(--soft);background:var(--gray);border-top:1px solid var(--blue);margin-top:auto}
+    /* ----- FOOTER ----- */
+    footer{
+        position:absolute;
+        bottom:10px;
+        font-size:12px;
+        color:var(--soft);
+        letter-spacing:1px;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Nova İtiraf</div>
+  <h1 class="glitter-text">Rüzgar Seyit Göngör</h1>
 </header>
 
-<section class="form-card">
-  <div class="form-title">Anonim İtirafını Yaz</div>
-  <textarea class="form-textarea" id="itirafText" placeholder="İtirafını buraya yaz..."></textarea>
-  <button class="form-btn" onclick="paylas()">Paylaş</button>
-</section>
-
-<section class="itiraf-list" id="itirafList"></section>
+<!-- #PHOTO-HERE: İstediğin fotoğraf linkini src="#" yerine yapıştır -->
+<div class="photo-box">
+  <img class="photo" src="#" alt="Fotoğraf">
+</div>
 
 <footer>
   Created by Rüzgar Seyit Göngör
 </footer>
 
+<!-- ---------- PARÇACIK ARKA PLAN ---------- -->
+<canvas id="particles"></canvas>
+
 <script>
-// ---------- GLOBAL ----------
-const itirafList = $('itirafList');
-let itiraflar = JSON.parse(localStorage.getItem('novaItiraflar')) || [];
+// ---------- PARÇACIK ARKA PLAN ---------- 
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-// ---------- PAYLAŞ ----------
-function paylas() {
-  const text = document.getElementById('itirafText').value.trim();
-  if (!text) return alert('İtiraf boş olamaz!');
-  const yeni = {
-    id: Date.now(),
-    text: text,
-    tarih: new Date().toLocaleString('tr-TR')
-  };
-  itiraflar.unshift(yeni);
-  localStorage.setItem('novaItiraflar', JSON.stringify(itiraflar));
-  document.getElementById('itirafText').value = '';
-  renderItiraflar();
-}
-
-// ---------- RENDER ----------
-function renderItiraflar() {
-  itirafList.innerHTML = '';
-  itiraflar.forEach(it => {
-    const card = document.createElement('div');
-    card.className = 'itiraf-card';
-    card.innerHTML = `
-      <div class="itiraf-header">
-        <span>Anonim</span>
-        <span>${it.tarih}</span>
-      </div>
-      <div class="itiraf-text">${it.text}</div>
-    `;
-    itirafList.appendChild(card);
+const particles=[];
+for(let i=0;i<120;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    radius:Math.random()*2+1,
+    speedX:(Math.random()-0.5)*0.8,
+    speedY:(Math.random()-0.5)*0.8,
+    color:Math.random()<0.5?'#27ae60':'#f1c40f'
   });
 }
-
-// ---------- INIT ----------
-renderItiraflar();
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+    if(p.x<0||p.x>canvas.width)p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height)p.speedY*=-1;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+});
 </script>
 
 </body>
