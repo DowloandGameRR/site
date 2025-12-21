@@ -2,17 +2,17 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Rüzgar Seyit Göngör</title>
+  <title>Rüzgar Seyit Göngör – RGB</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
     :root{
-      --gold:#f1c40f;
       --black:#0d0d0d;
       --gray:#2c2c2c;
       --soft:#ecf0f1;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Cinzel',serif}
+    html,body{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}
     body{
         background:radial-gradient(circle at center,var(--gray) 0%,var(--black) 100%);
         color:var(--soft);
@@ -21,38 +21,37 @@
         flex-direction:column;
         align-items:center;
         justify-content:center;
-        overflow:hidden;
+        position:relative;
     }
 
-    /* ----- ALTIN YAZI ----- */
-    .gold-text{
+    /* ---------- RGB YAZI ---------- */
+    .rgb-text{
         font-size:clamp(2rem,6vw,4rem);
         font-weight:700;
         letter-spacing:3px;
         text-align:center;
-        background:linear-gradient(45deg,var(--gold),#ffd700,var(--gold));
-        background-size:200% 200%;
+        background:linear-gradient(45deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
+        background-size:400% 400%;
         -webkit-background-clip:text;
         -webkit-text-fill-color:transparent;
-        animation:shine 3s infinite linear;
-        filter:drop-shadow(0 0 6px var(--gold));
+        animation:rgbShift 4s infinite linear;
+        filter:drop-shadow(0 0 8px #fff);
     }
-    @keyframes shine{
+    @keyframes rgbShift{
         0%{background-position:0% 50%}
         50%{background-position:100% 50%}
         100%{background-position:0% 50%}
     }
 
-    /* ----- KÜÇÜK FOTO KUTUSU ----- */
+    /* ---------- FOTO KUTUSU + RGB HALKA ---------- */
     .photo-box{
-        width:clamp(120px,25vw,200px);
+        width:clamp(140px,30vw,250px);
         aspect-ratio:1;
-        border:2px solid var(--gold);
         border-radius:16px;
         overflow:hidden;
-        margin:20px 0;
+        margin:30px 0;
         position:relative;
-        box-shadow:0 0 15px var(--gold),inset 0 0 15px rgba(0,0,0,.5);
+        box-shadow:0 0 20px #fff,inset 0 0 20px rgba(0,0,0,.5);
     }
     .photo{
         width:100%;
@@ -61,37 +60,39 @@
         animation:photoPulse 4s infinite ease-in-out;
     }
     @keyframes photoPulse{
-        0%,100%{filter:brightness(1) drop-shadow(0 0 8px var(--gold))}
-        50%{filter:brightness(1.15) drop-shadow(0 0 16px #ffd700)}
+        0%,100%{filter:brightness(1) drop-shadow(0 0 8px #fff)}
+        50%{filter:brightness(1.15) drop-shadow(0 0 16px #00ff00)}
     }
+    .rgb-ring{
+        position:absolute;
+        inset:-6px;
+        border-radius:16px;
+        background:conic-gradient(#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
+        animation:rotate 3s linear infinite;
+        z-index:-1;
+    }
+    @keyframes rotate{to{transform:rotate(360deg)}}
 
-    /* ----- INSTAGRAM BUTONU ----- */
-    .insta-btn{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:10px 18px;
-        background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
-        color:#fff;
+    /* ---------- YENİLEME BUTONU ---------- */
+    .refresh-btn{
+        position:fixed;
+        bottom:20px;
+        right:20px;
+        width:56px;
+        height:56px;
+        border-radius:50%;
+        background:#fff;
+        color:var(--black);
         border:none;
-        border-radius:25px;
-        font-weight:600;
-        font-size:clamp(.9rem,2.5vw,1.1rem);
+        font-size:24px;
         cursor:pointer;
-        transition:transform .2s,box-shadow .2s;
-        margin:10px 0;
+        box-shadow:0 4px 12px rgba(0,0,0,.4);
+        z-index:1000;
+        transition:transform .2s;
     }
-    .insta-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(255,255,255,.25)}
+    .refresh-btn:hover{transform:scale(1.1)}
 
-    /* ----- INSTA LOGO BOŞLUĞU ----- */
-    .insta-logo{
-        width:24px;
-        height:24px;
-        object-fit:contain;
-        filter:drop-shadow(0 0 2px #fff);
-    }
-
-    /* ----- PARÇACIK ARKA PLAN ----- */
+    /* ---------- PARÇACIK ARKA PLAN ---------- */
     #particles{
         position:fixed;
         inset:0;
@@ -99,7 +100,7 @@
         pointer-events:none;
     }
 
-    /* ----- FOOTER ----- */
+    /* ---------- FOOTER ---------- */
     footer{
         position:absolute;
         bottom:10px;
@@ -112,25 +113,22 @@
 <body>
 
 <header>
-  <h1 class="gold-text">Rüzgar Seyit Göngör</h1>
+  <h1 class="rgb-text">Rüzgar Seyit Göngör</h1>
 </header>
 
-<!-- KÜÇÜK FOTO KUTUSU -->
+<!-- FOTO KUTUSU + RGB HALKA -->
 <div class="photo-box">
+  <div class="rgb-ring"></div>
   <!-- #PHOTO-HERE: İstediğin fotoğraf linkini src="#" yerine yapıştır -->
-  <img class="photo" src="https://i.pinimg.com/736x/a8/a5/c1/a8a5c10c6ba9c4bbd91b949430e76fdb.jpg" alt="Fotoğraf">
+  <img class="photo" src="https://i.pinimg.com/736x/74/5e/c5/745ec546e5e31ef1de940ae430076183.jpg" alt="Fotoğraf">
 </div>
-
-<!-- INSTAGRAM BUTONU (yazının arasında) -->
-<a class="insta-btn" href="https://www.instagram.com/ruzgar.qw1?igsh=bzk4ejFjeTY0Mjd0">
-  <!-- #INSTA-LOGO-HERE: İstediğin Instagram logosunu src="#" yerine yapıştır -->
-  <img class="insta-logo" src="https://i.pinimg.com/736x/de/84/ec/de84ece92c36f184e873fa090c9e7624.jpg" alt="IG">
-  Instagram
-</a>
 
 <footer>
   Created by Rüzgar Seyit Göngör
 </footer>
+
+<!-- YENİLEME BUTONU -->
+<button class="refresh-btn" onclick="location.reload()" title="Yenile">↻</button>
 
 <!-- ---------- PARÇACIK ARKA PLAN ---------- -->
 <canvas id="particles"></canvas>
@@ -150,7 +148,7 @@ for(let i=0;i<120;i++){
     radius:Math.random()*2+1,
     speedX:(Math.random()-0.5)*0.8,
     speedY:(Math.random()-0.5)*0.8,
-    color:Math.random()<0.5?'#f1c40f':'#27ae60'
+    color:`hsl(${Math.random()*360},100%,50%)`
   });
 }
 function animate(){
