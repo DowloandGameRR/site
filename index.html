@@ -2,79 +2,102 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>NovaSta - Instagram Clone</title>
+  <title>NovaSta - Instagram Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Instagram+Sans:wght@300;400;500;600&display=swap');
     :root{
+      --bg:#ffffff;
+      --text:#262626;
+      --soft:#8e8e8e;
+      --border:#dbdbdb;
+      --like:#ed4956;
       --purple:#9b59b6;
-      --black:#0d0d0d;
-      --gray:#1a1a1a;
-      --text:#ecf0f1;
-      --soft:#bdc3c7;
+      --black:#000;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',sans-serif}
-    body{background:var(--black);color:var(--text);overflow-x:hidden}
-    /* ---------- PARTICLE BG ---------- */
-    #particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Instagram Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    body{background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* ---------- PARTICLE & PARALLAX ---------- */
+    #particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+    .parallax{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);opacity:.06;z-index:-2}
+
     /* ---------- AUTH ---------- */
-    .auth-screen{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
-    .auth-box{width:360px;background:var(--gray);border:1px solid var(--purple);border-radius:12px;padding:30px}
-    .auth-title{text-align:center;font-size:26px;color:var(--purple);margin-bottom:20px}
-    .auth-input{width:100%;padding:12px;margin:8px 0;background:#0d0d0d;border:1px solid #444;color:var(--text);border-radius:6px}
-    .auth-btn{width:100%;padding:12px;margin-top:10px;background:var(--purple);color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
-    .auth-btn:hover{filter:brightness(1.2)}
-    .auth-switch{text-align:center;margin-top:12px;font-size:13px;color:var(--soft);cursor:pointer}
+    .auth-screen{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .6s ease}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+    .auth-box{width:350px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:40px 30px;text-align:center}
+    .auth-logo{font-size:42px;font-weight:600;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px}
+    .auth-input{width:100%;padding:12px;margin:8px 0;background:#fafafa;border:1px solid var(--border);border-radius:6px;font-size:14px;transition:border .2s}
+    .auth-input:focus{outline:none;border-color:var(--purple)}
+    .auth-btn{width:100%;padding:12px;margin-top:10px;background:var(--purple);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:filter .2s}
+    .auth-btn:hover{filter:brightness(1.1)}
+    .auth-switch{margin-top:15px;font-size:13px;color:var(--soft);cursor:pointer}
     .auth-switch:hover{text-decoration:underline}
-    /* ---------- MAIN APP ---------- */
+
+    /* ---------- APP ---------- */
     .app{display:none;flex-direction:column;height:100vh}
-    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--gray);border-bottom:1px solid var(--purple)}
-    .logo{font-size:22px;color:var(--purple);font-weight:bold}
-    .icons{display:flex;gap:15px;font-size:20px;cursor:pointer}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .top-logo{font-size:24px;font-weight:600;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .top-icons{display:flex;gap:15px;font-size:22px;cursor:pointer}
     .main-content{flex:1;display:flex;overflow:hidden}
-    .left{width:250px;background:var(--gray);border-right:1px solid var(--purple);padding:15px;display:flex;flex-direction:column;gap:15px}
-    .menu-item{padding:10px;border-radius:6px;cursor:pointer;transition:background .2s}
-    .menu-item:hover{background:#2c2c2c}
-    .center{flex:1;padding:20px;overflow-y:auto}
-    .right{width:250px;background:var(--gray);border-left:1px solid var(--purple);padding:15px}
-    .story-box{display:flex;gap:10px;padding:10px;border:1px solid #444;border-radius:8px;margin-bottom:20px;overflow-x:auto}
-    .story{width:60px;height:60px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;cursor:pointer}
-    .post-card{background:#1a1a1a;border:1px solid #444;border-radius:8px;margin-bottom:20px}
-    .post-header{display:flex;align-items:center;padding:10px;gap:10px}
+    .left{width:240px;background:#fff;border-right:1px solid var(--border);padding:10px;display:flex;flex-direction:column;gap:8px}
+    .menu-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;font-size:15px;transition:background .2s}
+    .menu-item:hover{background:#f1f1f1}
+    .center{flex:1;padding:20px;overflow-y:auto;background:#fafafa}
+    .right{width:240px;background:#fff;border-left:1px solid var(--border);padding:10px}
+    .story-bar{display:flex;gap:12px;padding:12px;background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow-x:auto}
+    .story-item{flex-shrink:0;text-align:center;cursor:pointer}
+    .story-avatar{width:56px;height:56px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;transition:transform .2s}
+    .story-avatar:hover{transform:scale(1.08)}
+    .post-card{background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden;animation:fadeUp .5s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .post-header{display:flex;align-items:center;padding:12px;gap:10px}
     .post-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover}
-    .post-img{width:100%;max-height:500px;object-fit:cover}
-    .post-actions{display:flex;gap:15px;padding:10px;font-size:20px}
-    .post-likes{font-size:14px;padding:0 10px 10px}
-    .post-caption{font-size:14px;padding:0 10px 10px}
-    .comment-box{display:flex;padding:0 10px 10px;gap:6px}
-    .comment-input{flex:1;padding:6px;background:#0d0d0d;border:1px solid #444;color:var(--text);border-radius:4px;font-size:13px}
-    .comment-btn{padding:6px 10px;background:var(--purple);color:#fff;border:none;border-radius:4px;cursor:pointer}
-    .comments{padding:0 10px 10px;font-size:13px;color:var(--soft)}
+    .post-img{width:100%;max-height:600px;object-fit:cover}
+    .post-actions{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-size:24px}
+    .post-likes{font-weight:600;padding:0 12px 6px;font-size:14px}
+    .post-caption{padding:0 12px 10px;font-size:14px}
+    .comment-box{display:flex;align-items:center;padding:8px 12px;border-top:1px solid var(--border)}
+    .comment-input{flex:1;border:none;outline:none;font-size:14px}
+    .comment-btn{background:none;border:none;color:var(--purple);font-weight:600;cursor:pointer;margin-left:8px}
+    .comments{padding:0 12px 8px;font-size:13px;color:var(--soft)}
     /* ---------- PROFILE ---------- */
-    .profile-top{display:flex;align-items:center;gap:20px;padding:20px}
-    .profile-avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--purple)}
-    .profile-info{flex:1}
-    .profile-name{font-size:20px;font-weight:bold}
+    .profile-top{display:flex;align-items:center;gap:20px;padding:20px;background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:20px}
+    .profile-avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--purple);cursor:pointer;transition:border .2s}
+    .profile-avatar:hover{border-color:var(--yellow)}
+    .profile-name{font-size:24px;font-weight:600}
     .profile-bio{font-size:14px;color:var(--soft);margin-top:4px}
-    .profile-stats{display:flex;gap:20px;margin-top:10px;font-size:14px}
+    .profile-stats{display:flex;gap:25px;margin-top:10px;font-size:14px}
     .profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:20px}
-    .grid-img{width:100%;aspect-ratio:1;object-fit:cover;border:1px solid #444}
+    .grid-img{width:100%;aspect-ratio:1;object-fit:cover;border:1px solid var(--border);cursor:pointer;transition:transform .2s}
+    .grid-img:hover{transform:scale(1.03)}
     /* ---------- SETTINGS ---------- */
-    .settings-card{background:#1a1a1a;border:1px solid #444;border-radius:8px;padding:20px;margin-bottom:20px}
-    .settings-title{font-size:18px;color:var(--purple);margin-bottom:10px}
+    .settings-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+    .settings-title{font-size:18px;font-weight:600;color:var(--purple);margin-bottom:10px}
     .settings-row{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
-    .settings-btn{padding:6px 12px;background:var(--purple);color:#fff;border:none;border-radius:4px;cursor:pointer}
-    /* ---------- STORY VIEW ---------- */
-    .story-view{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:2000}
-    .story-img{max-width:90%;max-height:80%;border-radius:12px}
+    .settings-btn{padding:8px 14px;background:var(--purple);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;transition:filter .2s}
+    .settings-btn:hover{filter:brightness(1.1)}
+    /* ---------- STORY VIEWER ---------- */
+    .story-view{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:2000;animation:fadeIn .3s ease}
+    .story-img{max-width:90%;max-height:80%;border-radius:12px;animation:zoomIn .4s ease}
+    @keyframes zoomIn{from{transform:scale(.9)}to{transform:scale(1)}}
     .story-close{position:absolute;top:20px;right:20px;font-size:30px;color:#fff;cursor:pointer}
-    /* ---------- VIDEO RECORD ---------- */
-    .video-record{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:2000}
+    /* ---------- VIDEO RECORDER ---------- */
+    .video-record{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:2000;animation:fadeIn .3s ease}
     .video-preview{width:90%;max-height:60%;border-radius:12px}
-    .video-controls{display:flex;gap:15px;margin-top:15px}
-    .rec-btn{padding:10px 20px;background:var(--purple);color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .video-controls{display:flex;gap:15px;margin-top:20px}
+    .rec-btn{padding:12px 24px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:filter .2s}
+    .rec-btn:hover{filter:brightness(1.1)}
     /* ---------- FOOTER ---------- */
-    footer{text-align:center;padding:12px;font-size:12px;color:var(--soft);background:var(--gray);border-top:1px solid var(--purple)}
+    footer{text-align:center;padding:14px;font-size:12px;color:var(--soft);background:#fff;border-top:1px solid var(--border)}
+    /* ---------- MOBILE ---------- */
+    @media (max-width:768px){
+      .left,.right{display:none}
+      .main-content{flex-direction:column}
+      .top-bar{padding:8px 12px}
+      .top-logo{font-size:20px}
+      .post-img{max-height:400px}
+    }
   </style>
 </head>
 <body>
@@ -82,19 +105,19 @@
 <!-- ========== AUTH ========== -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-box">
-    <div class="auth-title" id="authTitle">NovaSta Giriş</div>
+    <div class="auth-logo">NovaSta</div>
     <input class="auth-input" id="username" placeholder="Kullanıcı adı">
     <input class="auth-input" id="password" type="password" placeholder="Şifre">
-    <button class="auth-btn" onclick="authAction()">Giriş Yap</button>
-    <div class="auth-switch" onclick="toggleAuth()">Hesabın yok mu? Kayıt ol</div>
+    <button class="auth-btn" id="authBtn" onclick="authAction()">Giriş Yap</button>
+    <div class="auth-switch" id="authSwitch" onclick="toggleAuth()">Hesabın yok mu? Kayıt ol</div>
   </div>
 </div>
 
 <!-- ========== APP ========== -->
 <div class="app" id="app">
   <div class="top-bar">
-    <div class="logo">NovaSta</div>
-    <div class="icons">
+    <div class="top-logo">NovaSta</div>
+    <div class="top-icons">
       <span onclick="showSection('home')">🏠</span>
       <span onclick="showSection('upload')">➕</span>
       <span onclick="showSection('profile')">👤</span>
@@ -104,22 +127,19 @@
   </div>
 
   <div class="main-content">
-    <!-- LEFT MENU -->
     <div class="left">
-      <div class="menu-item" onclick="showSection('home')">Ana Sayfa</div>
-      <div class="menu-item" onclick="showSection('explore')">Keşfet</div>
-      <div class="menu-item" onclick="showSection('reels')">Reels</div>
-      <div class="menu-item" onclick="showSection('messages')">Mesajlar</div>
-      <div class="menu-item" onclick="showSection('notifications')">Bildirimler</div>
-      <div class="menu-item" onclick="showSection('saved')">Kaydedilenler</div>
-      <hr style="border-color:#444;margin:10px 0">
+      <div class="menu-item" onclick="showSection('home')"><span>🏠</span> Ana Sayfa</div>
+      <div class="menu-item" onclick="showSection('explore')"><span>🔍</span> Keşfet</div>
+      <div class="menu-item" onclick="showSection('reels')"><span>🎞️</span> Reels</div>
+      <div class="menu-item" onclick="showSection('messages')"><span>✉️</span> Mesajlar</div>
+      <div class="menu-item" onclick="showSection('notifications')"><span>🔔</span> Bildirimler</div>
+      <div class="menu-item" onclick="showSection('saved')"><span>🔖</span> Kaydedilenler</div>
+      <hr style="border-color:#dbdbdb;margin:10px 0">
       <div id="accountSwitcher"></div>
     </div>
 
-    <!-- CENTER -->
     <div class="center" id="centerContent"></div>
 
-    <!-- RIGHT -->
     <div class="right">
       <div class="settings-card">
         <div class="settings-title">Hikayeler</div>
@@ -160,7 +180,6 @@ let stories = [];
 let mediaRecorder;
 let recordedChunks = [];
 
-// ---------- UTILS ----------
 const $ = id => document.getElementById(id);
 const show = (id, display = 'block') => $(id).style.display = display;
 const hide = id => $(id).style.display = 'none';
@@ -174,18 +193,16 @@ function saveAccounts() {
   localStorage.setItem('novasta_accounts', JSON.stringify(accounts));
 }
 function toggleAuth() {
-  const title = $('authTitle');
-  const btn = $('username').nextElementSibling;
-  if (title.textContent.includes('Giriş')) {
-    title.textContent = 'NovaSta Kayıt';
+  const title = $('authSwitch');
+  const btn = $('authBtn');
+  if (btn.textContent === 'Giriş Yap') {
     btn.textContent = 'Kayıt Ol';
+    title.textContent = 'Zaten hesabın var mı? Giriş yap';
     btn.onclick = () => authAction('register');
-    $('username').nextElementSibling.nextElementSibling.textContent = 'Zaten hesabın var mı? Giriş yap';
   } else {
-    title.textContent = 'NovaSta Giriş';
     btn.textContent = 'Giriş Yap';
+    title.textContent = 'Hesabın yok mu? Kayıt ol';
     btn.onclick = () => authAction('login');
-    $('username').nextElementSibling.nextElementSibling.textContent = 'Hesabın yok mu? Kayıt ol';
   }
 }
 function authAction(mode) {
@@ -196,7 +213,7 @@ function authAction(mode) {
   if (mode === 'register') {
     if (accounts.length >= maxAccounts) return alert('Max 5 hesap');
     if (accounts.find(a => a.username === user)) return alert('Kullanıcı adı alınmış');
-    accounts.push({username:user, password:pass, avatar:'', bio:'', posts:[], saved:[], following:[], followers:[]});
+    accounts.push({username:user, password:pass, avatar:'', bio:'', posts:[], saved:[], following:[], followers:[], stories:[]});
     saveAccounts();
     alert('Kayıt başarılı');
     toggleAuth();
@@ -263,18 +280,17 @@ function showSection(sec) {
 function buildHome() {
   const c = $('centerContent');
   // Stories
-  const storyBox = document.createElement('div');
-  storyBox.className = 'story-box';
+  const storyBar = document.createElement('div');
+  storyBar.className = 'story-bar';
   accounts.forEach(acc => {
     if (acc.stories && acc.stories.length) {
-      const img = document.createElement('img');
-      img.className = 'story';
-      img.src = acc.stories[0];
-      img.onclick = () => openStory(acc.username, 0);
-      storyBox.appendChild(img);
+      const item = document.createElement('div');
+      item.className = 'story-item';
+      item.innerHTML = `<img class="story-avatar" src="${acc.stories[0]}" alt="${acc.username}" onclick="openStory('${acc.username}', 0)"><div style="font-size:12px;margin-top:4px">${acc.username}</div>`;
+      storyBar.appendChild(item);
     }
   });
-  c.appendChild(storyBox);
+  c.appendChild(storyBar);
   // Posts
   const allPosts = [];
   accounts.forEach(acc => allPosts.push(...acc.posts.map(p => ({...p, owner:acc.username}))));
@@ -291,25 +307,26 @@ function buildPostCard(p) {
       <img class="post-avatar" src="${accounts.find(a=>a.username===p.owner)?.avatar||'#'}" onclick="showProfile('${p.owner}')">
       <div><div class="profile-name">${p.owner}</div></div>
     </div>
-    <img class="post-img" src="${p.img}" alt="post">
+    <img class="post-img" src="${p.img}" alt="post" onclick="likePost('${p.owner}', '${p.id}')">
     <div class="post-actions">
-      <span onclick="toggleLike('${p.owner}', '${p.id}')">❤️</span>
-      <span onclick="focusComment('${p.owner}', '${p.id}')">💬</span>
-      <span onclick="savePost('${p.owner}', '${p.id}')">🔖</span>
+      <div>
+        <span style="cursor:pointer;font-size:24px" onclick="toggleLike('${p.owner}', '${p.id}')">${p.likes.includes(currentUser.username)?'❤️':'🤍'}</span>
+        <span style="cursor:pointer;font-size:24px" onclick="focusComment('${p.owner}', '${p.id}')">💬</span>
+        <span style="cursor:pointer;font-size:24px" onclick="savePost('${p.owner}', '${p.id}')">${currentUser.saved.includes(p.id)?'🔖':'🗂️'}</span>
+      </div>
     </div>
     <div class="post-likes">${p.likes.length} beğeni</div>
-    <div class="post-caption">${p.caption}</div>
+    <div class="post-caption"><b>${p.owner}</b> ${p.caption}</div>
     <div class="comments" id="comments-${p.owner}-${p.id}"></div>
     <div class="comment-box">
       <input class="comment-input" id="commentInp-${p.owner}-${p.id}" placeholder="Yorum yaz...">
-      <button class="comment-btn" onclick="addComment('${p.owner}', '${p.id}')">Gönder</button>
+      <button class="comment-btn" onclick="addComment('${p.owner}', '${p.id}')">Paylaş</button>
     </div>
   `;
-  // Yorumları doldur
   const cmtBox = card.querySelector(`#comments-${p.owner}-${p.id}`);
   p.comments.forEach(c => {
     const div = document.createElement('div');
-    div.textContent = `${c.user}: ${c.text}`;
+    div.innerHTML = `<b>${c.user}</b> ${c.text}`;
     cmtBox.appendChild(div);
   });
   return card;
@@ -322,14 +339,12 @@ function buildUpload() {
     <div class="settings-card">
       <div class="settings-title">Fotoğraf Yükle</div>
       <input type="file" id="postFile" accept="image/*">
-      <br><br>
       <textarea id="postCaption" class="auth-input" placeholder="Açıklama" rows="3"></textarea>
       <button class="auth-btn" onclick="uploadPost()">Paylaş</button>
     </div>
     <div class="settings-card">
       <div class="settings-title">Hikaye Ekle</div>
       <input type="file" id="storyFile" accept="image/*">
-      <br><br>
       <button class="auth-btn" onclick="uploadStory()">Hikaye Paylaş</button>
     </div>
     <div class="settings-card">
@@ -370,7 +385,7 @@ function buildProfile() {
   c.innerHTML = `
     <div class="profile-top">
       <img class="profile-avatar" src="${currentUser.avatar||'#'}" id="profileAvatar" onclick="changeAvatar()">
-      <div class="profile-info">
+      <div>
         <div class="profile-name">${currentUser.username}</div>
         <div class="profile-bio">${currentUser.bio||'Biyografi yok'}</div>
         <div class="profile-stats">
@@ -413,7 +428,7 @@ function buildSettings() {
   const c = $('centerContent');
   c.innerHTML = `
     <div class="settings-card">
-      <div class="settings-title">Tema</div>
+      <div class="settings-title">Görünüm</div>
       <div class="settings-row">
         <span>Parlaklık</span>
         <input type="range" min="50" max="150" value="100" oninput="setBrightness(this.value)">
@@ -439,11 +454,10 @@ function buildStoryList() {
   box.innerHTML = '';
   accounts.forEach(acc => {
     if (acc.stories && acc.stories.length) {
-      const img = document.createElement('img');
-      img.className = 'story';
-      img.src = acc.stories[0];
-      img.onclick = () => openStory(acc.username, 0);
-      box.appendChild(img);
+      const item = document.createElement('div');
+      item.className = 'story-item';
+      item.innerHTML = `<img class="story-avatar" src="${acc.stories[0]}" alt="${acc.username}" onclick="openStory('${acc.username}', 0)"><div style="font-size:12px;margin-top:4px">${acc.username}</div>`;
+      box.appendChild(item);
     }
   });
 }
@@ -517,10 +531,12 @@ function savePost(owner, postId) {
   if (currentUser.saved.includes(postId)) currentUser.saved = currentUser.saved.filter(id => id != postId);
   else currentUser.saved.push(postId);
   saveAccounts();
-  alert(currentUser.saved.includes(postId) ? 'Kaydedildi' : 'Kayıt kaldırıldı');
 }
 function focusComment(owner, postId) {
   $(`commentInp-${owner}-${postId}`).focus();
+}
+function likePost(owner, postId) {
+  toggleLike(owner, postId);
 }
 
 // ---------- SECTION PLACEHOLDERS ----------
@@ -571,6 +587,39 @@ animateParticles();
 window.addEventListener('resize', () => {canvas.width = window.innerWidth; canvas.height = window.innerHeight;});
 
 // ---------- INIT ----------
+function loadAccounts() {
+  const raw = localStorage.getItem('novasta_accounts');
+  accounts = raw ? JSON.parse(raw) : [];
+}
+function saveAccounts() {
+  localStorage.setItem('novasta_accounts', JSON.stringify(accounts));
+}
+function initApp() {
+  hide('authScreen');
+  show('app');
+  buildAccountSwitcher();
+  showSection('home');
+  buildStoryList();
+}
+function buildAccountSwitcher() {
+  const box = $('accountSwitcher');
+  box.innerHTML = '<div style="font-size:12px;color:var(--soft);margin-bottom:6px">Hesap Değiştir</div>';
+  accounts.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'menu-item';
+    div.textContent = a.username;
+    div.onclick = () => switchAccount(i);
+    box.appendChild(div);
+  });
+}
+function switchAccount(index) {
+  currentAccountIndex = index;
+  currentUser = accounts[index];
+  showSection('home');
+  buildStoryList();
+}
+
+// ---------- START ----------
 loadAccounts();
 if (accounts.length > 0) {
   currentUser = accounts[0];
