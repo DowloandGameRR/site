@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Rüzgar Seyit Göngör – RGB</title>
+  <title>Rüzgar Seyit Göngör – RGB Spin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
@@ -24,32 +24,31 @@
         position:relative;
     }
 
-    /* ---------- RGB YAZI ---------- */
+    /* ----- RGB YAZI (SOLDAN SAĞA DÖNEN) ----- */
     .rgb-text{
         font-size:clamp(2rem,6vw,4rem);
         font-weight:700;
         letter-spacing:3px;
         text-align:center;
-        background:linear-gradient(45deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
-        background-size:400% 400%;
+        background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
+        background-size:200% 100%;
         -webkit-background-clip:text;
         -webkit-text-fill-color:transparent;
-        animation:rgbShift 4s infinite linear;
+        animation:rgbMove 4s linear infinite;
         filter:drop-shadow(0 0 8px #fff);
     }
-    @keyframes rgbShift{
+    @keyframes rgbMove{
         0%{background-position:0% 50%}
-        50%{background-position:100% 50%}
-        100%{background-position:0% 50%}
+        100%{background-position:200% 50%}
     }
 
-    /* ---------- FOTO KUTUSU + RGB HALKA ---------- */
+    /* ----- KÜÇÜK FOTO KUTUSU + RGB KARE IŞIK ----- */
     .photo-box{
-        width:clamp(140px,30vw,250px);
+        width:clamp(120px,25vw,200px);
         aspect-ratio:1;
         border-radius:16px;
         overflow:hidden;
-        margin:30px 0;
+        margin:20px 0;
         position:relative;
         box-shadow:0 0 20px #fff,inset 0 0 20px rgba(0,0,0,.5);
     }
@@ -63,17 +62,43 @@
         0%,100%{filter:brightness(1) drop-shadow(0 0 8px #fff)}
         50%{filter:brightness(1.15) drop-shadow(0 0 16px #00ff00)}
     }
-    .rgb-ring{
+    .rgb-square{
         position:absolute;
-        inset:-6px;
+        inset:-8px;
         border-radius:16px;
         background:conic-gradient(#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
-        animation:rotate 3s linear infinite;
+        animation:squareRotate 4s linear infinite;
         z-index:-1;
     }
-    @keyframes rotate{to{transform:rotate(360deg)}}
+    @keyframes squareRotate{to{transform:rotate(360deg)}}
 
-    /* ---------- YENİLEME BUTONU ---------- */
+    /* ----- INSTAGRAM BUTONU (yazının arasında) ----- */
+    .insta-btn{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding:10px 18px;
+        background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+        color:#fff;
+        border:none;
+        border-radius:25px;
+        font-weight:600;
+        font-size:clamp(.9rem,2.5vw,1.1rem);
+        cursor:pointer;
+        transition:transform .2s,box-shadow .2s;
+        margin:10px 0;
+    }
+    .insta-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(255,255,255,.25)}
+
+    /* ----- INSTA LOGO BOŞLUĞU ----- */
+    .insta-logo{
+        width:24px;
+        height:24px;
+        object-fit:contain;
+        filter:drop-shadow(0 0 2px #fff);
+    }
+
+    /* ----- YENİLEME BUTONU ----- */
     .refresh-btn{
         position:fixed;
         bottom:20px;
@@ -92,7 +117,7 @@
     }
     .refresh-btn:hover{transform:scale(1.1)}
 
-    /* ---------- PARÇACIK ARKA PLAN ---------- */
+    /* ----- PARÇACIK ARKA PLAN ----- */
     #particles{
         position:fixed;
         inset:0;
@@ -100,7 +125,7 @@
         pointer-events:none;
     }
 
-    /* ---------- FOOTER ---------- */
+    /* ----- FOOTER ----- */
     footer{
         position:absolute;
         bottom:10px;
@@ -116,12 +141,19 @@
   <h1 class="rgb-text">Rüzgar Seyit Göngör</h1>
 </header>
 
-<!-- FOTO KUTUSU + RGB HALKA -->
+<!-- KÜÇÜK FOTO KUTUSU + RGB KARE IŞIK -->
 <div class="photo-box">
-  <div class="rgb-ring"></div>
+  <div class="rgb-square"></div>
   <!-- #PHOTO-HERE: İstediğin fotoğraf linkini src="#" yerine yapıştır -->
   <img class="photo" src="https://i.pinimg.com/736x/74/5e/c5/745ec546e5e31ef1de940ae430076183.jpg" alt="Fotoğraf">
 </div>
+
+<!-- INSTAGRAM BUTONU (yazının arasında) -->
+<a class="insta-btn" href="https://www.instagram.com/ruzgar.qw1?igsh=bzk4ejFjeTY0Mjd0">
+  <!-- #INSTA-LOGO-HERE: İstediğin Instagram logosunu src="#" yerine yapıştır -->
+  <img class="insta-logo" src="https://i.pinimg.com/736x/de/84/ec/de84ece92c36f184e873fa090c9e7624.jpg" alt="IG">
+  Instagram
+</a>
 
 <footer>
   Created by Rüzgar Seyit Göngör
