@@ -2,16 +2,14 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>NOVA</title>
+<title>NOVA | Valorant Community</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --accent:#c77dff;
-  --bg:#05010a;
   --glass:rgba(255,255,255,.08);
 }
 
@@ -20,69 +18,17 @@
 body{
   font-family:Inter,sans-serif;
   background:url("https://i.pinimg.com/1200x/57/fd/58/57fd588efe6978501636b1f438f94905.jpg") center/cover fixed no-repeat;
-  height:100vh;
   color:#fff;
+  height:100vh;
   overflow:hidden;
 }
 
-/* OVERLAY */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle at 20% 20%,rgba(199,125,255,.25),transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(199,125,255,.15),transparent 45%),
-    rgba(0,0,0,.65);
-  z-index:-2;
-}
-
-/* FLOATING BLURS */
-.blur{
-  position:fixed;
-  width:420px;
-  height:420px;
-  background:rgba(199,125,255,.18);
-  filter:blur(160px);
-  animation:float 20s infinite alternate ease-in-out;
+  background:rgba(0,0,0,.65);
   z-index:-1;
-}
-.blur.b1{top:10%;left:5%}
-.blur.b2{bottom:10%;right:10%;animation-duration:26s}
-
-@keyframes float{
-  from{transform:translateY(0)}
-  to{transform:translateY(-120px)}
-}
-
-/* INTRO */
-#intro{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:99;
-  animation:introFade 1s ease forwards;
-  animation-delay:2.2s;
-}
-
-#intro h1{
-  font-family:Orbitron;
-  font-size:48px;
-  letter-spacing:6px;
-  color:var(--accent);
-  animation:pulse 1.8s ease infinite;
-}
-
-@keyframes pulse{
-  0%,100%{opacity:.6}
-  50%{opacity:1}
-}
-
-@keyframes introFade{
-  to{opacity:0;pointer-events:none}
 }
 
 /* NAV */
@@ -91,11 +37,11 @@ nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:0 48px;
+  padding:0 50px;
   backdrop-filter:blur(14px);
 }
 
-nav h2{
+nav h1{
   font-family:Orbitron;
   letter-spacing:4px;
   color:var(--accent);
@@ -107,7 +53,7 @@ nav button{
   color:#fff;
   font-family:Rajdhani;
   font-size:17px;
-  margin-left:26px;
+  margin-left:28px;
   cursor:pointer;
   position:relative;
 }
@@ -129,18 +75,14 @@ nav button.active::after{
   left:0;
   width:100%;
   height:calc(100% - 70px);
-  padding:50px 8%;
+  padding:40px 8%;
   display:none;
-  animation:enter .5s ease;
+  overflow:auto;
 }
 
 .screen.active{display:block}
 
-@keyframes enter{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1}
-}
-
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -150,88 +92,83 @@ nav button.active::after{
 .card{
   background:var(--glass);
   backdrop-filter:blur(16px);
-  border-radius:22px;
-  padding:22px;
-  transition:.4s;
+  border-radius:20px;
+  padding:20px;
+  cursor:pointer;
+  transition:.3s;
 }
 
 .card:hover{
-  transform:translateY(-8px);
+  transform:translateY(-6px);
 }
 
 /* CROSSHAIR */
 .code{
   font-family:monospace;
   background:#000;
-  padding:10px;
-  border-radius:10px;
-  margin-top:10px;
+  padding:8px;
+  border-radius:8px;
+  margin-top:8px;
+  display:flex;
+  justify-content:space-between;
   color:var(--accent);
-  display:flex;
-  justify-content:space-between;
 }
 
-.copy{cursor:pointer;font-size:12px}
+.copy{font-size:12px}
 
-/* SETTINGS */
-.toggle{
-  display:flex;
-  justify-content:space-between;
-  margin-top:14px;
+/* ACCORDION */
+.content{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .4s ease;
+  margin-top:10px;
+  font-size:14px;
+  line-height:1.6;
 }
-.toggle button{
+
+.card.open .content{
+  max-height:500px;
+}
+
+/* BUTTON */
+.small-btn{
   background:#000;
   color:#fff;
   border:none;
-  padding:8px 14px;
+  padding:6px 12px;
   border-radius:20px;
   cursor:pointer;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro"><h1>NOVA</h1></div>
-<div class="blur b1"></div>
-<div class="blur b2"></div>
-
 <nav>
-  <h2>NOVA</h2>
+  <h1>NOVA</h1>
   <div>
     <button class="active" onclick="openScreen('cross',this)">Crosshair</button>
+    <button onclick="openScreen('guides',this)">Rehberler</button>
     <button onclick="openScreen('agents',this)">Ajanlar</button>
     <button onclick="openScreen('settings',this)">FPS</button>
-    <button onclick="openScreen('guides',this)">Rehber</button>
   </div>
 </nav>
 
 <!-- CROSSHAIR -->
 <div id="cross" class="screen active">
   <div class="grid">
-    <div class="card"><h3>TenZ</h3><div class="code"><span>0;s;1;P;c;5;h;0;0l;4</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
-    <div class="card"><h3>Derke</h3><div class="code"><span>0;P;c;1;o;1;d;1;z;3</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
-    <div class="card"><h3>yay</h3><div class="code"><span>0;s;1;P;c;8;o;1</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
-    <div class="card"><h3>ScreaM</h3><div class="code"><span>0;P;c;7;o;1;d;1</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
-  </div>
-</div>
-
-<!-- AGENTS -->
-<div id="agents" class="screen">
-  <div class="grid">
-    <div class="card"><h3>Jett</h3><p>Duelist – Entry</p></div>
-    <div class="card"><h3>Omen</h3><p>Controller – Map Control</p></div>
-    <div class="card"><h3>Sova</h3><p>Initiator – Info</p></div>
-  </div>
-</div>
-
-<!-- FPS -->
-<div id="settings" class="screen">
-  <div class="card">
-    <h3>FPS Optimizasyonu</h3>
-    <div class="toggle">
-      <span>Blur Efektleri</span>
-      <button onclick="toggleBlur()">Aç / Kapat</button>
+    <div class="card">
+      <h3>TenZ</h3>
+      <div class="code"><span>0;s;1;P;c;5;h;0</span><span class="copy" onclick="copy(this)">Kopyala</span></div>
+    </div>
+    <div class="card">
+      <h3>Derke</h3>
+      <div class="code"><span>0;P;c;1;o;1</span><span class="copy" onclick="copy(this)">Kopyala</span></div>
+    </div>
+    <div class="card">
+      <h3>Minimal</h3>
+      <div class="code"><span>0;c;7;o;0</span><span class="copy" onclick="copy(this)">Kopyala</span></div>
     </div>
   </div>
 </div>
@@ -239,9 +176,46 @@ nav button.active::after{
 <!-- GUIDES -->
 <div id="guides" class="screen">
   <div class="grid">
-    <div class="card">Aim Training Rutini</div>
-    <div class="card">Sensitivity Mantığı</div>
-    <div class="card">Rank Yükselme Stratejileri</div>
+    <div class="card" onclick="toggle(this)">
+      <h3>Aim Training Rutini</h3>
+      <div class="content">
+        Günlük 15–20 dk aim lab, deathmatch ve crosshair disiplini.
+        Crosshair’ı head level’da tutmak en kritik alışkanlıktır.
+      </div>
+    </div>
+
+    <div class="card" onclick="toggle(this)">
+      <h3>Sensitivity Mantığı</h3>
+      <div class="content">
+        Düşük sens daha stabil aim sağlar.
+        Profesyoneller genelde 200–400 eDPI aralığında oynar.
+      </div>
+    </div>
+
+    <div class="card" onclick="toggle(this)">
+      <h3>Rank Yükselme</h3>
+      <div class="content">
+        Utility kullanımı aim’den daha önemlidir.
+        Solo rank’ta info paylaşımı kazandırır.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS -->
+<div id="agents" class="screen">
+  <div class="grid">
+    <div class="card"><h3>Jett</h3><p>Duelist – Entry frag</p></div>
+    <div class="card"><h3>Omen</h3><p>Controller – Map control</p></div>
+    <div class="card"><h3>Sova</h3><p>Initiator – Info</p></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="screen">
+  <div class="card">
+    <h3>FPS / Performans</h3>
+    <button class="small-btn" onclick="toggleEffects()">Efektleri Aç / Kapat</button>
   </div>
 </div>
 
@@ -260,10 +234,12 @@ function copy(el){
  setTimeout(()=>el.innerText="Kopyala",1000);
 }
 
-function toggleBlur(){
- document.querySelectorAll('.blur').forEach(b=>{
-  b.style.display = b.style.display==="none"?"block":"none";
- });
+function toggle(card){
+ card.classList.toggle("open");
+}
+
+function toggleEffects(){
+ document.body.classList.toggle("low");
 }
 </script>
 
