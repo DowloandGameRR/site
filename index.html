@@ -2,314 +2,234 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>CONTROL</title>
+<title>VALO HUB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --neon:#00ff9c;
-  --bg:#000;
-  --panel:#020617cc;
-  --border:#1e293b;
+  --neon:#c77dff;
+  --neon2:#9d4edd;
+  --glass:rgba(255,255,255,0.08);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Consolas,monospace}
-
-html,body{
-  width:100%;
-  height:100%;
-  background:#000;
-  overflow:hidden;
-  color:#e5e7eb;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* MATRIX FULLSCREEN */
-#matrix{
-  position:fixed;
-  inset:0;
-  width:100vw;
-  height:100vh;
-  z-index:0;
+body{
+  font-family:Inter,sans-serif;
+  color:white;
+  background:url("bg.jpg") center/cover fixed no-repeat;
+  min-height:100vh;
 }
 
-/* SCANLINE */
-body::after{
+body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:linear-gradient(
-    to bottom,
-    rgba(255,255,255,.03) 1px,
-    transparent 1px
-  );
-  background-size:100% 3px;
-  pointer-events:none;
-  z-index:2;
+  background:radial-gradient(circle at top,rgba(124,58,237,.25),#000);
+  backdrop-filter: blur(4px);
+  z-index:-1;
 }
 
-/* APP */
-#app{
-  position:relative;
-  z-index:1;
-  display:flex;
-  height:100vh;
-  backdrop-filter:blur(2px);
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:230px;
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  padding:16px;
-}
-.sidebar h2{
-  color:var(--neon);
-  margin-bottom:16px;
-}
-.sidebar a{
-  display:block;
-  padding:10px;
-  color:#e5e7eb;
-  text-decoration:none;
-  border-radius:8px;
-  margin-bottom:6px;
-}
-.sidebar a:hover{background:#020617}
-
-/* MAIN */
-.main{
-  flex:1;
-  padding:16px;
-  overflow:auto;
-}
-
-/* TOP */
-.top{
+/* NAVBAR */
+nav{
   display:flex;
   justify-content:space-between;
-  margin-bottom:14px;
+  padding:20px 40px;
+  position:sticky;
+  top:0;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(10px);
+  z-index:10;
 }
-.status{color:var(--neon)}
+
+nav h1{
+  font-family:Orbitron;
+  color:var(--neon);
+}
+
+nav a{
+  margin-left:20px;
+  text-decoration:none;
+  color:white;
+  position:relative;
+}
+
+nav a::after{
+  content:"";
+  position:absolute;
+  bottom:-4px;
+  left:0;
+  width:0;
+  height:2px;
+  background:var(--neon);
+  transition:.3s;
+}
+
+nav a:hover::after{width:100%}
+
+/* SECTIONS */
+section{
+  padding:80px 10%;
+}
+
+.title{
+  font-family:Orbitron;
+  font-size:32px;
+  margin-bottom:30px;
+  color:var(--neon);
+}
 
 /* CARDS */
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
-  margin-bottom:12px;
-}
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px;
-  box-shadow:0 0 20px #00ff9c22;
-}
-
-/* GRID */
 .grid{
   display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
 }
 
-/* TERMINAL */
-.terminal{
-  background:#000;
-  border:1px solid var(--border);
-  border-radius:12px;
-  height:260px;
-  display:flex;
-  flex-direction:column;
+.card{
+  background:var(--glass);
+  border-radius:18px;
+  padding:20px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 40px rgba(199,125,255,.15);
+  transition:.4s;
 }
-.output{
-  flex:1;
-  overflow:auto;
+
+.card:hover{
+  transform:translateY(-10px) scale(1.02);
+  box-shadow:0 0 60px rgba(199,125,255,.35);
+}
+
+/* CROSSHAIR */
+.code{
+  background:#000;
   padding:10px;
+  border-radius:10px;
+  font-family:monospace;
   color:var(--neon);
+  margin-top:10px;
+}
+
+/* AGENT */
+.agent-role{
   font-size:13px;
-}
-.input{
-  border:none;
-  border-top:1px solid var(--border);
-  background:#000;
-  color:var(--neon);
-  padding:8px;
-  outline:none;
+  color:#ddd;
+  margin-bottom:10px;
 }
 
-/* CHART */
-.chart{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-}
-canvas.chartCanvas{width:100%;height:220px}
-
-/* LOGS */
-.logs{
-  margin-top:12px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-  height:160px;
-  overflow:hidden;
-}
-.log{font-size:12px;color:#22d3ee}
-
-/* MOBILE */
-@media(max-width:900px){
-  .grid{grid-template-columns:1fr}
-  .sidebar{display:none}
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:.6;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
+<nav>
+  <h1>VALO HUB</h1>
+  <div>
+    <a href="#home">Ana</a>
+    <a href="#crosshair">Crosshair</a>
+    <a href="#agents">Ajanlar</a>
+    <a href="#guides">Rehber</a>
+  </div>
+</nav>
 
-<div id="app">
-  <aside class="sidebar">
-    <h2>CONTROL</h2>
-    <a>Dashboard</a>
-    <a>Processes</a>
-    <a>Network</a>
-    <a>Terminal</a>
-    <a>Settings</a>
-  </aside>
+<section id="home">
+  <h2 class="title">Valorant Evreni</h2>
+  <p>
+    Valorant için her şey tek yerde.  
+    Crosshair kodları, ajan yetenekleri ve rekabetçi rehberler.
+  </p>
+</section>
 
-  <main class="main">
-    <div class="top">
-      <h3>System Overview</h3>
-      <div class="status">ONLINE</div>
+<section id="crosshair">
+  <h2 class="title">Popüler Crosshair Kodları</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>TenZ</h3>
+      <div class="code">0;s;1;P;c;5;h;0;0l;4;0o;2;0a;1</div>
+    </div>
+    <div class="card">
+      <h3>Derke</h3>
+      <div class="code">0;P;c;1;o;1;d;1;z;3;a;1</div>
+    </div>
+    <div class="card">
+      <h3>yay</h3>
+      <div class="code">0;s;1;P;c;8;o;1;0t;4;0l;1</div>
+    </div>
+  </div>
+</section>
+
+<section id="agents">
+  <h2 class="title">Ajanlar</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Jett</h3>
+      <div class="agent-role">Duelist</div>
+      <p>Hızlı giriş, dash ve havadan üstünlük.</p>
+      <ul>
+        <li>Tailwind – Dash</li>
+        <li>Updraft – Zıplama</li>
+        <li>Blade Storm – Ultimate</li>
+      </ul>
     </div>
 
-    <div class="cards">
-      <div class="card">CPU<br><b id="cpu">78%</b></div>
-      <div class="card">Memory<br><b id="ram">42%</b></div>
-      <div class="card">Latency<br><b id="ping">30ms</b></div>
-      <div class="card">Threads<br><b id="thr">120</b></div>
+    <div class="card">
+      <h3>Omen</h3>
+      <div class="agent-role">Controller</div>
+      <p>Harita kontrolü ve zihin oyunu.</p>
+      <ul>
+        <li>Dark Cover – Smoke</li>
+        <li>Paranoia – Blind</li>
+        <li>From the Shadows – TP</li>
+      </ul>
     </div>
 
-    <div class="grid">
-      <div class="terminal">
-        <div class="output" id="out"></div>
-        <input class="input" id="cmd" placeholder="> sorgu yaz">
-      </div>
-
-      <div class="chart">
-        <canvas class="chartCanvas" id="chart"></canvas>
-      </div>
+    <div class="card">
+      <h3>Sage</h3>
+      <div class="agent-role">Sentinel</div>
+      <p>Takım desteği ve alan kontrolü.</p>
+      <ul>
+        <li>Barrier Orb – Duvar</li>
+        <li>Slow Orb</li>
+        <li>Resurrection – Ult</li>
+      </ul>
     </div>
+  </div>
+</section>
 
-    <div class="logs" id="logs"></div>
-  </main>
-</div>
+<section id="guides">
+  <h2 class="title">Rehberler</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Aim Geliştirme</h3>
+      <p>Low sens + crosshair sabitliği.</p>
+    </div>
+    <div class="card">
+      <h3>FPS Ayarları</h3>
+      <p>VSync kapalı, düşük grafik.</p>
+    </div>
+    <div class="card">
+      <h3>Rank Mantığı</h3>
+      <p>Utility kullanımı aim’den önemlidir.</p>
+    </div>
+  </div>
+</section>
 
-<script>
-/* MATRIX FIX */
-const m=document.getElementById("matrix"),ctx=m.getContext("2d");
-function resize(){
-  m.width=window.innerWidth;
-  m.height=window.innerHeight;
-}
-resize();
-addEventListener("resize",resize);
-
-const chars="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%";
-const fontSize=14;
-let cols=Math.floor(window.innerWidth/fontSize);
-let drops=Array(cols).fill(1);
-
-function matrix(){
-  ctx.fillStyle="rgba(0,0,0,0.08)";
-  ctx.fillRect(0,0,m.width,m.height);
-  ctx.fillStyle="#00ff9c";
-  ctx.font=fontSize+"px monospace";
-  for(let i=0;i<drops.length;i++){
-    const t=chars[Math.floor(Math.random()*chars.length)];
-    ctx.fillText(t,i*fontSize,drops[i]*fontSize);
-    if(drops[i]*fontSize>m.height&&Math.random()>0.98)drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(matrix,33);
-
-/* FAKE STATS */
-setInterval(()=>{
-  cpu.textContent=Math.floor(60+Math.random()*30)+"%";
-  ram.textContent=Math.floor(30+Math.random()*50)+"%";
-  ping.textContent=Math.floor(20+Math.random()*40)+"ms";
-  thr.textContent=Math.floor(90+Math.random()*80);
-},1200);
-
-/* TERMINAL + SAHTE SORGU */
-const out=document.getElementById("out");
-cmd.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    const q=cmd.value;
-    cmd.value="";
-    write("> "+q);
-    fakeQuery(q);
-  }
-});
-
-function write(t){
-  const d=document.createElement("div");
-  d.textContent=t;
-  out.appendChild(d);
-  out.scrollTop=out.scrollHeight;
-}
-
-function fakeQuery(q){
-  write("sorgulanıyor...");
-  setTimeout(()=>{
-    if(q.toLowerCase().includes("isim")){
-      write("Ad: Ahmet Yılmaz");
-      write("Doğum: 1994");
-    }else if(q.toLowerCase().includes("adres")){
-      write("Adres: İstanbul / Kadıköy");
-    }else if(q.toLowerCase().includes("ev")){
-      write("Konut: Aktif");
-      write("Metrekare: 120");
-    }else{
-      write("kayıt bulundu");
-    }
-  },800);
-}
-
-/* LOGS */
-const logs=document.getElementById("logs");
-setInterval(()=>{
-  const l=document.createElement("div");
-  l.className="log";
-  l.textContent=`[${new Date().toLocaleTimeString()}] heartbeat`;
-  logs.appendChild(l);
-  if(logs.children.length>10)logs.removeChild(logs.firstChild);
-},900);
-
-/* CHART */
-const c=document.getElementById("chart"),cctx=c.getContext("2d");
-function drawChart(){
-  c.width=c.offsetWidth;
-  c.height=c.offsetHeight;
-  cctx.clearRect(0,0,c.width,c.height);
-  cctx.strokeStyle="#00ff9c";
-  cctx.beginPath();
-  for(let i=0;i<20;i++){
-    const x=i*(c.width/19);
-    const y=Math.random()*c.height;
-    cctx.lineTo(x,y);
-  }
-  cctx.stroke();
-}
-setInterval(drawChart,1200);
-</script>
+<footer>
+  VALO HUB © 2025
+</footer>
 
 </body>
 </html>
-
