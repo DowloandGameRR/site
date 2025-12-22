@@ -2,256 +2,267 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Admin Panel (Demo)</title>
+<title>Control Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Inter, system-ui, sans-serif;
+:root{
+  --bg:#000;
+  --panel:#020617;
+  --border:#1e293b;
+  --neon:#00ff9c;
+  --neon2:#22d3ee;
+  --text:#e5e7eb;
+  --muted:#64748b;
 }
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Consolas, monospace}
 
 body{
-    background:#0f172a;
-    color:#e5e7eb;
-    height:100vh;
-    overflow:hidden;
+  background:#000;
+  color:var(--text);
+  height:100vh;
+  overflow:hidden;
 }
 
-/* ===== LOGIN ===== */
-#login{
-    position:fixed;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#020617,#020617dd);
+/* MATRIX */
+#matrix{
+  position:fixed;
+  inset:0;
+  z-index:0;
 }
 
-.login-box{
-    width:360px;
-    padding:30px;
-    background:#020617;
-    border-radius:14px;
-    box-shadow:0 0 40px rgba(0,0,0,.8);
-}
-
-.login-box h2{
-    margin-bottom:8px;
-}
-
-.login-box p{
-    font-size:13px;
-    color:#94a3b8;
-    margin-bottom:20px;
-}
-
-.login-box input{
-    width:100%;
-    padding:12px;
-    margin-bottom:12px;
-    border-radius:10px;
-    border:none;
-    outline:none;
-    background:#020617;
-    color:white;
-    border:1px solid #1e293b;
-}
-
-.login-box button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    background:linear-gradient(135deg,#38bdf8,#2563eb);
-    font-weight:600;
-}
-
-/* ===== PANEL ===== */
-#panel{
-    display:none;
-    height:100vh;
+/* LAYOUT */
+#app{
+  position:relative;
+  z-index:1;
+  display:flex;
+  height:100vh;
+  backdrop-filter: blur(2px);
 }
 
 /* SIDEBAR */
 .sidebar{
-    width:240px;
-    background:#020617;
-    padding:20px;
-    border-right:1px solid #1e293b;
+  width:230px;
+  background:rgba(2,6,23,.9);
+  border-right:1px solid var(--border);
+  padding:16px;
 }
-
-.sidebar h3{
-    margin-bottom:20px;
+.sidebar h2{
+  color:var(--neon);
+  margin-bottom:16px;
 }
-
 .sidebar a{
-    display:block;
-    padding:10px;
-    border-radius:8px;
-    text-decoration:none;
-    color:#cbd5f5;
-    margin-bottom:6px;
+  display:block;
+  padding:10px;
+  color:var(--text);
+  text-decoration:none;
+  border-radius:8px;
+  margin-bottom:6px;
 }
-
-.sidebar a:hover{
-    background:#1e293b;
-}
+.sidebar a:hover{background:#020617}
 
 /* MAIN */
 .main{
-    flex:1;
-    padding:25px;
-    overflow:auto;
+  flex:1;
+  padding:16px;
+  overflow:auto;
 }
 
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:25px;
+/* TOP */
+.top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:16px;
 }
-
-.badge{
-    background:#7c3aed;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:12px;
+.status{
+  color:var(--neon);
 }
 
 /* CARDS */
 .cards{
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-    gap:16px;
-    margin-bottom:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-bottom:16px;
 }
-
 .card{
-    background:#020617;
-    border:1px solid #1e293b;
-    padding:20px;
-    border-radius:14px;
+  background:rgba(2,6,23,.85);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 0 20px #00ff9c22;
+}
+.card span{color:var(--muted);font-size:12px}
+.card h2{margin-top:6px}
+
+/* CONTENT GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:12px;
 }
 
-.card span{
-    font-size:12px;
-    color:#94a3b8;
+/* TERMINAL */
+.terminal{
+  background:#000;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  height:260px;
+  display:flex;
+  flex-direction:column;
+}
+.terminal-output{
+  flex:1;
+  overflow:auto;
+  color:var(--neon);
+  font-size:13px;
+}
+.terminal input{
+  background:#000;
+  border:none;
+  border-top:1px solid var(--border);
+  padding:8px;
+  color:var(--neon);
+  outline:none;
 }
 
-.card h2{
-    margin-top:8px;
+/* CHART */
+.chart{
+  background:rgba(2,6,23,.85);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
 }
+canvas{width:100%;height:220px}
 
-/* TABLE */
-.table{
-    background:#020617;
-    border-radius:14px;
-    overflow:hidden;
-    border:1px solid #1e293b;
+/* LOGS */
+.logs{
+  margin-top:12px;
+  background:rgba(2,6,23,.85);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  height:160px;
+  overflow:hidden;
 }
+.log{font-size:12px;color:var(--neon2);margin-bottom:4px}
 
-.table header,
-.row{
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding:14px;
-}
-
-.table header{
-    background:#020617;
-    color:#94a3b8;
-    font-size:13px;
-}
-
-.row{
-    border-top:1px solid #1e293b;
-}
-
-.fake{
-    color:#fbbf24;
-    font-size:12px;
-    margin-top:10px;
+/* MOBILE */
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr}
+  .sidebar{display:none}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN (SAHTE) -->
-<div id="login">
-    <div class="login-box">
-        <h2>Admin Panel</h2>
-        <p>Demo giriş – gerçek doğrulama yok</p>
-        <input type="text" placeholder="Kullanıcı adı">
-        <input type="password" placeholder="Şifre">
-        <button onclick="openPanel()">Giriş Yap</button>
+<canvas id="matrix"></canvas>
+
+<div id="app">
+  <aside class="sidebar">
+    <h2>CONTROL</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Processes</a>
+    <a href="#">Network</a>
+    <a href="#">Terminal</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h3>System Overview</h3>
+      <div class="status">ONLINE</div>
     </div>
-</div>
 
-<!-- PANEL -->
-<div id="panel" style="display:flex;">
-    <aside class="sidebar">
-        <h3>⚙️ Admin</h3>
-        <a href="#">Dashboard</a>
-        <a href="#">Users</a>
-        <a href="#">Settings</a>
-        <a href="#">Logs</a>
-        <a href="#">Logout</a>
-    </aside>
+    <div class="cards">
+      <div class="card"><span>CPU</span><h2 id="cpu">32%</h2></div>
+      <div class="card"><span>Memory</span><h2 id="ram">61%</h2></div>
+      <div class="card"><span>Latency</span><h2 id="ping">24ms</h2></div>
+      <div class="card"><span>Threads</span><h2 id="thr">128</h2></div>
+    </div>
 
-    <main class="main">
-        <div class="topbar">
-            <h2>Dashboard</h2>
-            <div class="badge">FAKE PANEL</div>
-        </div>
+    <div class="grid">
+      <div class="terminal">
+        <div class="terminal-output" id="termOut"></div>
+        <input placeholder="> command">
+      </div>
 
-        <div class="cards">
-            <div class="card">
-                <span>Total Users</span>
-                <h2>1,284</h2>
-            </div>
-            <div class="card">
-                <span>Active Sessions</span>
-                <h2>87</h2>
-            </div>
-            <div class="card">
-                <span>Errors</span>
-                <h2>3</h2>
-            </div>
-        </div>
+      <div class="chart">
+        <canvas id="chart"></canvas>
+      </div>
+    </div>
 
-        <div class="table">
-            <header>
-                <div>User</div>
-                <div>Status</div>
-                <div>Last Login</div>
-            </header>
-            <div class="row">
-                <div>admin</div>
-                <div>online</div>
-                <div>2 min ago</div>
-            </div>
-            <div class="row">
-                <div>demo_user</div>
-                <div>offline</div>
-                <div>1 hour ago</div>
-            </div>
-        </div>
-
-        <div class="fake">
-            ⚠️ Bu panel tamamen görseldir (mockup). Gerçek sistem değildir.
-        </div>
-    </main>
+    <div class="logs" id="logs"></div>
+  </main>
 </div>
 
 <script>
-function openPanel(){
-    document.getElementById("login").style.display="none";
-    document.getElementById("panel").style.display="flex";
+/* MATRIX */
+const m=document.getElementById("matrix"),c=m.getContext("2d");
+function resize(){m.width=innerWidth;m.height=innerHeight}
+resize();addEventListener("resize",resize);
+const letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&";
+const cols=Math.floor(innerWidth/14);
+const drops=Array(cols).fill(1);
+function draw(){
+  c.fillStyle="rgba(0,0,0,.05)";
+  c.fillRect(0,0,m.width,m.height);
+  c.fillStyle="#00ff9c";
+  c.font="14px monospace";
+  for(let i=0;i<drops.length;i++){
+    const t=letters[Math.floor(Math.random()*letters.length)];
+    c.fillText(t,i*14,drops[i]*14);
+    if(drops[i]*14>m.height&&Math.random()>0.975)drops[i]=0;
+    drops[i]++;
+  }
 }
+setInterval(draw,33);
+
+/* FAKE STATS */
+setInterval(()=>{
+  cpu.textContent=Math.floor(20+Math.random()*60)+"%";
+  ram.textContent=Math.floor(40+Math.random()*50)+"%";
+  ping.textContent=Math.floor(15+Math.random()*40)+"ms";
+  thr.textContent=Math.floor(80+Math.random()*120);
+},1200);
+
+/* TERMINAL */
+const out=document.getElementById("termOut");
+function termLine(t){
+  const d=document.createElement("div");
+  d.textContent="> "+t;
+  out.appendChild(d);
+  out.scrollTop=out.scrollHeight;
+}
+setInterval(()=>termLine("process sync OK"),1500);
+
+/* LOGS */
+const logs=document.getElementById("logs");
+setInterval(()=>{
+  const l=document.createElement("div");
+  l.className="log";
+  l.textContent=`[${new Date().toLocaleTimeString()}] heartbeat`;
+  logs.appendChild(l);
+  if(logs.children.length>10)logs.removeChild(logs.firstChild);
+},900);
+
+/* CHART (FAKE) */
+const ch=document.getElementById("chart"),ctx=ch.getContext("2d");
+function drawChart(){
+  ctx.clearRect(0,0,ch.width,ch.height);
+  ctx.strokeStyle="#00ff9c";
+  ctx.beginPath();
+  for(let i=0;i<20;i++){
+    const x=i*(ch.width/19);
+    const y=Math.random()*ch.height;
+    ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+}
+setInterval(drawChart,1200);
 </script>
 
 </body>
