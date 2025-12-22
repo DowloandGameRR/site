@@ -2,49 +2,64 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Control Panel</title>
+<title>CONTROL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
-  --bg:#000;
-  --panel:#020617;
-  --border:#1e293b;
   --neon:#00ff9c;
-  --neon2:#22d3ee;
-  --text:#e5e7eb;
-  --muted:#64748b;
+  --bg:#000;
+  --panel:#020617cc;
+  --border:#1e293b;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Consolas, monospace}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Consolas,monospace}
 
-body{
+html,body{
+  width:100%;
+  height:100%;
   background:#000;
-  color:var(--text);
-  height:100vh;
   overflow:hidden;
+  color:#e5e7eb;
 }
 
-/* MATRIX */
+/* MATRIX FULLSCREEN */
 #matrix{
   position:fixed;
   inset:0;
+  width:100vw;
+  height:100vh;
   z-index:0;
 }
 
-/* LAYOUT */
+/* SCANLINE */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,.03) 1px,
+    transparent 1px
+  );
+  background-size:100% 3px;
+  pointer-events:none;
+  z-index:2;
+}
+
+/* APP */
 #app{
   position:relative;
   z-index:1;
   display:flex;
   height:100vh;
-  backdrop-filter: blur(2px);
+  backdrop-filter:blur(2px);
 }
 
 /* SIDEBAR */
 .sidebar{
   width:230px;
-  background:rgba(2,6,23,.9);
+  background:var(--panel);
   border-right:1px solid var(--border);
   padding:16px;
 }
@@ -55,7 +70,7 @@ body{
 .sidebar a{
   display:block;
   padding:10px;
-  color:var(--text);
+  color:#e5e7eb;
   text-decoration:none;
   border-radius:8px;
   margin-bottom:6px;
@@ -73,30 +88,26 @@ body{
 .top{
   display:flex;
   justify-content:space-between;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
-.status{
-  color:var(--neon);
-}
+.status{color:var(--neon)}
 
 /* CARDS */
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:12px;
-  margin-bottom:16px;
+  margin-bottom:12px;
 }
 .card{
-  background:rgba(2,6,23,.85);
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:12px;
   padding:14px;
   box-shadow:0 0 20px #00ff9c22;
 }
-.card span{color:var(--muted);font-size:12px}
-.card h2{margin-top:6px}
 
-/* CONTENT GRID */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:1.2fr .8fr;
@@ -108,49 +119,49 @@ body{
   background:#000;
   border:1px solid var(--border);
   border-radius:12px;
-  padding:12px;
   height:260px;
   display:flex;
   flex-direction:column;
 }
-.terminal-output{
+.output{
   flex:1;
   overflow:auto;
+  padding:10px;
   color:var(--neon);
   font-size:13px;
 }
-.terminal input{
-  background:#000;
+.input{
   border:none;
   border-top:1px solid var(--border);
-  padding:8px;
+  background:#000;
   color:var(--neon);
+  padding:8px;
   outline:none;
 }
 
 /* CHART */
 .chart{
-  background:rgba(2,6,23,.85);
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:12px;
-  padding:12px;
+  padding:10px;
 }
-canvas{width:100%;height:220px}
+canvas.chartCanvas{width:100%;height:220px}
 
 /* LOGS */
 .logs{
   margin-top:12px;
-  background:rgba(2,6,23,.85);
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:12px;
-  padding:12px;
+  padding:10px;
   height:160px;
   overflow:hidden;
 }
-.log{font-size:12px;color:var(--neon2);margin-bottom:4px}
+.log{font-size:12px;color:#22d3ee}
 
 /* MOBILE */
-@media(max-width:800px){
+@media(max-width:900px){
   .grid{grid-template-columns:1fr}
   .sidebar{display:none}
 }
@@ -164,11 +175,11 @@ canvas{width:100%;height:220px}
 <div id="app">
   <aside class="sidebar">
     <h2>CONTROL</h2>
-    <a href="#">Dashboard</a>
-    <a href="#">Processes</a>
-    <a href="#">Network</a>
-    <a href="#">Terminal</a>
-    <a href="#">Settings</a>
+    <a>Dashboard</a>
+    <a>Processes</a>
+    <a>Network</a>
+    <a>Terminal</a>
+    <a>Settings</a>
   </aside>
 
   <main class="main">
@@ -178,20 +189,20 @@ canvas{width:100%;height:220px}
     </div>
 
     <div class="cards">
-      <div class="card"><span>CPU</span><h2 id="cpu">32%</h2></div>
-      <div class="card"><span>Memory</span><h2 id="ram">61%</h2></div>
-      <div class="card"><span>Latency</span><h2 id="ping">24ms</h2></div>
-      <div class="card"><span>Threads</span><h2 id="thr">128</h2></div>
+      <div class="card">CPU<br><b id="cpu">78%</b></div>
+      <div class="card">Memory<br><b id="ram">42%</b></div>
+      <div class="card">Latency<br><b id="ping">30ms</b></div>
+      <div class="card">Threads<br><b id="thr">120</b></div>
     </div>
 
     <div class="grid">
       <div class="terminal">
-        <div class="terminal-output" id="termOut"></div>
-        <input placeholder="> command">
+        <div class="output" id="out"></div>
+        <input class="input" id="cmd" placeholder="> sorgu yaz">
       </div>
 
       <div class="chart">
-        <canvas id="chart"></canvas>
+        <canvas class="chartCanvas" id="chart"></canvas>
       </div>
     </div>
 
@@ -200,44 +211,76 @@ canvas{width:100%;height:220px}
 </div>
 
 <script>
-/* MATRIX */
-const m=document.getElementById("matrix"),c=m.getContext("2d");
-function resize(){m.width=innerWidth;m.height=innerHeight}
-resize();addEventListener("resize",resize);
-const letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&";
-const cols=Math.floor(innerWidth/14);
-const drops=Array(cols).fill(1);
-function draw(){
-  c.fillStyle="rgba(0,0,0,.05)";
-  c.fillRect(0,0,m.width,m.height);
-  c.fillStyle="#00ff9c";
-  c.font="14px monospace";
+/* MATRIX FIX */
+const m=document.getElementById("matrix"),ctx=m.getContext("2d");
+function resize(){
+  m.width=window.innerWidth;
+  m.height=window.innerHeight;
+}
+resize();
+addEventListener("resize",resize);
+
+const chars="01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%";
+const fontSize=14;
+let cols=Math.floor(window.innerWidth/fontSize);
+let drops=Array(cols).fill(1);
+
+function matrix(){
+  ctx.fillStyle="rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,m.width,m.height);
+  ctx.fillStyle="#00ff9c";
+  ctx.font=fontSize+"px monospace";
   for(let i=0;i<drops.length;i++){
-    const t=letters[Math.floor(Math.random()*letters.length)];
-    c.fillText(t,i*14,drops[i]*14);
-    if(drops[i]*14>m.height&&Math.random()>0.975)drops[i]=0;
+    const t=chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(t,i*fontSize,drops[i]*fontSize);
+    if(drops[i]*fontSize>m.height&&Math.random()>0.98)drops[i]=0;
     drops[i]++;
   }
 }
-setInterval(draw,33);
+setInterval(matrix,33);
 
 /* FAKE STATS */
 setInterval(()=>{
-  cpu.textContent=Math.floor(20+Math.random()*60)+"%";
-  ram.textContent=Math.floor(40+Math.random()*50)+"%";
-  ping.textContent=Math.floor(15+Math.random()*40)+"ms";
-  thr.textContent=Math.floor(80+Math.random()*120);
+  cpu.textContent=Math.floor(60+Math.random()*30)+"%";
+  ram.textContent=Math.floor(30+Math.random()*50)+"%";
+  ping.textContent=Math.floor(20+Math.random()*40)+"ms";
+  thr.textContent=Math.floor(90+Math.random()*80);
 },1200);
 
-/* TERMINAL */
-const out=document.getElementById("termOut");
-function termLine(t){
+/* TERMINAL + SAHTE SORGU */
+const out=document.getElementById("out");
+cmd.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    const q=cmd.value;
+    cmd.value="";
+    write("> "+q);
+    fakeQuery(q);
+  }
+});
+
+function write(t){
   const d=document.createElement("div");
-  d.textContent="> "+t;
+  d.textContent=t;
   out.appendChild(d);
   out.scrollTop=out.scrollHeight;
 }
-setInterval(()=>termLine("process sync OK"),1500);
+
+function fakeQuery(q){
+  write("sorgulanıyor...");
+  setTimeout(()=>{
+    if(q.toLowerCase().includes("isim")){
+      write("Ad: Ahmet Yılmaz");
+      write("Doğum: 1994");
+    }else if(q.toLowerCase().includes("adres")){
+      write("Adres: İstanbul / Kadıköy");
+    }else if(q.toLowerCase().includes("ev")){
+      write("Konut: Aktif");
+      write("Metrekare: 120");
+    }else{
+      write("kayıt bulundu");
+    }
+  },800);
+}
 
 /* LOGS */
 const logs=document.getElementById("logs");
@@ -249,21 +292,24 @@ setInterval(()=>{
   if(logs.children.length>10)logs.removeChild(logs.firstChild);
 },900);
 
-/* CHART (FAKE) */
-const ch=document.getElementById("chart"),ctx=ch.getContext("2d");
+/* CHART */
+const c=document.getElementById("chart"),cctx=c.getContext("2d");
 function drawChart(){
-  ctx.clearRect(0,0,ch.width,ch.height);
-  ctx.strokeStyle="#00ff9c";
-  ctx.beginPath();
+  c.width=c.offsetWidth;
+  c.height=c.offsetHeight;
+  cctx.clearRect(0,0,c.width,c.height);
+  cctx.strokeStyle="#00ff9c";
+  cctx.beginPath();
   for(let i=0;i<20;i++){
-    const x=i*(ch.width/19);
-    const y=Math.random()*ch.height;
-    ctx.lineTo(x,y);
+    const x=i*(c.width/19);
+    const y=Math.random()*c.height;
+    cctx.lineTo(x,y);
   }
-  ctx.stroke();
+  cctx.stroke();
 }
 setInterval(drawChart,1200);
 </script>
 
 </body>
 </html>
+
