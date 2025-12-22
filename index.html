@@ -1,207 +1,225 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Rüzgar Seyit Göngör – RGB Spin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
-    :root{
-      --black:#0d0d0d;
-      --gray:#2c2c2c;
-      --soft:#ecf0f1;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Cinzel',serif}
-    html,body{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}
-    body{
-        background:radial-gradient(circle at center,var(--gray) 0%,var(--black) 100%);
-        color:var(--soft);
-        min-height:100vh;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        position:relative;
-    }
+<meta charset="UTF-8">
+<title>3D Kış Hediyesi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* ----- RGB YAZI (SOLDAN SAĞA DÖNEN) ----- */
-    .rgb-text{
-        font-size:clamp(2rem,6vw,4rem);
-        font-weight:700;
-        letter-spacing:3px;
-        text-align:center;
-        background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
-        background-size:200% 100%;
-        -webkit-background-clip:text;
-        -webkit-text-fill-color:transparent;
-        animation:rgbMove 4s linear infinite;
-        filter:drop-shadow(0 0 8px #fff);
-    }
-    @keyframes rgbMove{
-        0%{background-position:0% 50%}
-        100%{background-position:200% 50%}
-    }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", sans-serif;
+}
 
-    /* ----- KÜÇÜK FOTO KUTUSU + RGB KARE IŞIK ----- */
-    .photo-box{
-        width:clamp(120px,25vw,200px);
-        aspect-ratio:1;
-        border-radius:16px;
-        overflow:hidden;
-        margin:20px 0;
-        position:relative;
-        box-shadow:0 0 20px #fff,inset 0 0 20px rgba(0,0,0,.5);
-    }
-    .photo{
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        animation:photoPulse 4s infinite ease-in-out;
-    }
-    @keyframes photoPulse{
-        0%,100%{filter:brightness(1) drop-shadow(0 0 8px #fff)}
-        50%{filter:brightness(1.15) drop-shadow(0 0 16px #00ff00)}
-    }
-    .rgb-square{
-        position:absolute;
-        inset:-8px;
-        border-radius:16px;
-        background:conic-gradient(#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000);
-        animation:squareRotate 4s linear infinite;
-        z-index:-1;
-    }
-    @keyframes squareRotate{to{transform:rotate(360deg)}}
+body{
+    height:100vh;
+    overflow:hidden;
+    background: radial-gradient(circle at top, #1c3b70, #050b1a);
+    color:white;
+    perspective:1200px;
+}
 
-    /* ----- INSTAGRAM BUTONU (yazının arasında) ----- */
-    .insta-btn{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:10px 18px;
-        background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
-        color:#fff;
-        border:none;
-        border-radius:25px;
-        font-weight:600;
-        font-size:clamp(.9rem,2.5vw,1.1rem);
-        cursor:pointer;
-        transition:transform .2s,box-shadow .2s;
-        margin:10px 0;
-    }
-    .insta-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(255,255,255,.25)}
+/* ===== KAR ===== */
+.snow{
+    position:fixed;
+    top:-20px;
+    pointer-events:none;
+    animation: fall linear infinite;
+    filter: blur(0.5px);
+}
 
-    /* ----- INSTA LOGO BOŞLUĞU ----- */
-    .insta-logo{
-        width:24px;
-        height:24px;
-        object-fit:contain;
-        filter:drop-shadow(0 0 2px #fff);
+@keyframes fall{
+    to{
+        transform: translateY(120vh);
     }
+}
 
-    /* ----- YENİLEME BUTONU ----- */
-    .refresh-btn{
-        position:fixed;
-        bottom:20px;
-        right:20px;
-        width:56px;
-        height:56px;
-        border-radius:50%;
-        background:#fff;
-        color:var(--black);
-        border:none;
-        font-size:24px;
-        cursor:pointer;
-        box-shadow:0 4px 12px rgba(0,0,0,.4);
-        z-index:1000;
-        transition:transform .2s;
-    }
-    .refresh-btn:hover{transform:scale(1.1)}
+/* ===== GİRİŞ ===== */
+#login{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.6);
+    z-index:5;
+}
 
-    /* ----- PARÇACIK ARKA PLAN ----- */
-    #particles{
-        position:fixed;
-        inset:0;
-        z-index:-1;
-        pointer-events:none;
-    }
+.login-box{
+    padding:40px;
+    background: rgba(255,255,255,0.08);
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 0 60px rgba(255,255,255,0.25);
+}
 
-    /* ----- FOOTER ----- */
-    footer{
-        position:absolute;
-        bottom:10px;
-        font-size:11px;
-        color:var(--soft);
-        letter-spacing:1px;
-    }
-  </style>
+.login-box input{
+    padding:12px;
+    width:100%;
+    margin:15px 0;
+    border-radius:10px;
+    border:none;
+    outline:none;
+}
+
+.login-box button{
+    padding:12px;
+    width:100%;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+/* ===== SAHNE ===== */
+#scene{
+    display:none;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transform-style: preserve-3d;
+}
+
+/* ===== 3D HEDİYE ===== */
+.gift{
+    width:240px;
+    height:220px;
+    position:relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+}
+
+.box{
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#b71c1c,#7f0000);
+    border-radius:12px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.7);
+    position:absolute;
+}
+
+.ribbon{
+    position:absolute;
+    width:30px;
+    height:100%;
+    background:gold;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.lid{
+    position:absolute;
+    width:100%;
+    height:60px;
+    top:-55px;
+    background:linear-gradient(135deg,#ff5252,#b71c1c);
+    border-radius:12px;
+    transform-origin: bottom;
+    transition: transform 1.2s cubic-bezier(.2,1.8,.4,1);
+}
+
+/* ===== FOTO ===== */
+#photo{
+    position:absolute;
+    top:-40px;
+    left:50%;
+    transform: translateX(-50%) translateZ(-200px) scale(0.3);
+    opacity:0;
+    transition: all 1.4s ease;
+}
+
+#photo img{
+    max-width:320px;
+    border-radius:18px;
+    box-shadow:0 0 80px rgba(255,255,255,0.9);
+}
+
+/* ===== AÇILDIKTAN SONRA ===== */
+.open .lid{
+    transform: rotateX(160deg) translateZ(30px);
+}
+
+.open #photo{
+    opacity:1;
+    transform: translateX(-50%) translateZ(200px) scale(1);
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1 class="rgb-text">Rüzgar Seyit Göngör</h1>
-</header>
-
-<!-- KÜÇÜK FOTO KUTUSU + RGB KARE IŞIK -->
-<div class="photo-box">
-  <div class="rgb-square"></div>
-  <!-- #PHOTO-HERE: İstediğin fotoğraf linkini src="#" yerine yapıştır -->
-  <img class="photo" src="https://i.pinimg.com/736x/74/5e/c5/745ec546e5e31ef1de940ae430076183.jpg" alt="Fotoğraf">
+<div id="login">
+    <div class="login-box">
+        <h2>❄️ Kış Hediyesi 🎁</h2>
+        <input type="password" id="keyInput" placeholder="Key gir">
+        <button onclick="checkKey()">Giriş</button>
+    </div>
 </div>
 
-<!-- INSTAGRAM BUTONU (yazının arasında) -->
-<a class="insta-btn" href="https://www.instagram.com/ruzgar.qw1?igsh=bzk4ejFjeTY0Mjd0">
-  <!-- #INSTA-LOGO-HERE: İstediğin Instagram logosunu src="#" yerine yapıştır -->
-  <img class="insta-logo" src="https://i.pinimg.com/736x/de/84/ec/de84ece92c36f184e873fa090c9e7624.jpg" alt="IG">
-  Instagram
-</a>
+<div id="scene">
+    <div class="gift" id="gift">
+        <div class="lid" id="lid"></div>
+        <div class="box"></div>
+        <div class="ribbon"></div>
 
-<footer>
-  Created by Rüzgar Seyit Göngör
-</footer>
-
-<!-- YENİLEME BUTONU -->
-<button class="refresh-btn" onclick="location.reload()" title="Yenile">↻</button>
-
-<!-- ---------- PARÇACIK ARKA PLAN ---------- -->
-<canvas id="particles"></canvas>
+        <div id="photo">
+            <!-- FOTO LİNKİNİ BURAYA KOY -->
+            <img src="YOUR_IMAGE_LINK_HERE">
+        </div>
+    </div>
+</div>
 
 <script>
-// ---------- PARÇACIK ARKA PLAN ---------- 
-const canvas=document.getElementById('particles');
-const ctx=canvas.getContext('2d');
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+/* ===== KEY'LER ===== */
+const VALID_KEYS = [
+    "KEY1",
+    "KEY2",
+    "KEY3",
+    "KEY4",
+    "KEY5"
+];
 
-const particles=[];
-for(let i=0;i<120;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    radius:Math.random()*2+1,
-    speedX:(Math.random()-0.5)*0.8,
-    speedY:(Math.random()-0.5)*0.8,
-    color:`hsl(${Math.random()*360},100%,50%)`
-  });
+function checkKey(){
+    const val = keyInput.value;
+    if(VALID_KEYS.includes(val)){
+        login.style.display="none";
+        scene.style.display="flex";
+    }else{
+        alert("Yanlış key ❌");
+    }
 }
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
-    p.x+=p.speedX;
-    p.y+=p.speedY;
-    if(p.x<0||p.x>canvas.width)p.speedX*=-1;
-    if(p.y<0||p.y>canvas.height)p.speedY*=-1;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
-    ctx.fillStyle=p.color;
-    ctx.fill();
-  });
-  requestAnimationFrame(animate);
-}
-animate();
-window.addEventListener('resize',()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
+
+/* ===== HEDİYE AÇ ===== */
+const gift = document.getElementById("gift");
+gift.addEventListener("click", ()=>{
+    gift.classList.add("open");
 });
+
+/* ===== MOUSE 3D TILT ===== */
+document.addEventListener("mousemove", e=>{
+    const x = (window.innerWidth/2 - e.clientX)/40;
+    const y = (window.innerHeight/2 - e.clientY)/40;
+    gift.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* ===== KAR ===== */
+function snow(){
+    const s = document.createElement("div");
+    s.className="snow";
+    s.innerHTML="❄";
+    s.style.left=Math.random()*innerWidth+"px";
+    s.style.fontSize=Math.random()*18+10+"px";
+    s.style.opacity=Math.random();
+    s.style.animationDuration=Math.random()*5+6+"s";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),11000);
+}
+setInterval(snow,120);
 </script>
 
 </body>
