@@ -2,14 +2,16 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>NOVA | Valorant Hub</title>
+<title>NOVA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --neon:#c77dff;
+  --accent:#c77dff;
+  --bg:#05010a;
   --glass:rgba(255,255,255,.08);
 }
 
@@ -18,65 +20,106 @@
 body{
   font-family:Inter,sans-serif;
   background:url("https://i.pinimg.com/1200x/57/fd/58/57fd588efe6978501636b1f438f94905.jpg") center/cover fixed no-repeat;
-  color:#fff;
   height:100vh;
+  color:#fff;
   overflow:hidden;
 }
 
+/* OVERLAY */
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at top,rgba(199,125,255,.25),#000);
-  backdrop-filter:blur(6px);
+  background:
+    radial-gradient(circle at 20% 20%,rgba(199,125,255,.25),transparent 40%),
+    radial-gradient(circle at 80% 70%,rgba(199,125,255,.15),transparent 45%),
+    rgba(0,0,0,.65);
   z-index:-2;
 }
 
-/* MATRIX */
-canvas{
+/* FLOATING BLURS */
+.blur{
   position:fixed;
-  inset:0;
+  width:420px;
+  height:420px;
+  background:rgba(199,125,255,.18);
+  filter:blur(160px);
+  animation:float 20s infinite alternate ease-in-out;
   z-index:-1;
-  opacity:.18;
+}
+.blur.b1{top:10%;left:5%}
+.blur.b2{bottom:10%;right:10%;animation-duration:26s}
+
+@keyframes float{
+  from{transform:translateY(0)}
+  to{transform:translateY(-120px)}
 }
 
-/* NAVBAR */
+/* INTRO */
+#intro{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:99;
+  animation:introFade 1s ease forwards;
+  animation-delay:2.2s;
+}
+
+#intro h1{
+  font-family:Orbitron;
+  font-size:48px;
+  letter-spacing:6px;
+  color:var(--accent);
+  animation:pulse 1.8s ease infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:.6}
+  50%{opacity:1}
+}
+
+@keyframes introFade{
+  to{opacity:0;pointer-events:none}
+}
+
+/* NAV */
 nav{
   height:70px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:0 40px;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(12px);
+  align-items:center;
+  padding:0 48px;
+  backdrop-filter:blur(14px);
 }
 
-nav h1{
+nav h2{
   font-family:Orbitron;
-  color:var(--neon);
-  letter-spacing:3px;
+  letter-spacing:4px;
+  color:var(--accent);
 }
 
 nav button{
   background:none;
   border:none;
   color:#fff;
-  margin-left:22px;
-  font-size:15px;
+  font-family:Rajdhani;
+  font-size:17px;
+  margin-left:26px;
   cursor:pointer;
   position:relative;
 }
 
-nav button.active::after,
-nav button:hover::after{
+nav button.active::after{
   content:"";
   position:absolute;
   left:0;
   bottom:-8px;
   width:100%;
   height:2px;
-  background:var(--neon);
-  box-shadow:0 0 12px var(--neon);
+  background:var(--accent);
 }
 
 /* SCREENS */
@@ -86,176 +129,142 @@ nav button:hover::after{
   left:0;
   width:100%;
   height:calc(100% - 70px);
-  padding:60px 10%;
+  padding:50px 8%;
   display:none;
-  animation:fade .5s ease;
+  animation:enter .5s ease;
 }
 
 .screen.active{display:block}
 
-@keyframes fade{
+@keyframes enter{
   from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:none}
-}
-
-/* UI */
-.title{
-  font-family:Orbitron;
-  font-size:34px;
-  margin-bottom:30px;
-  color:var(--neon);
+  to{opacity:1}
 }
 
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:22px;
+  gap:24px;
 }
 
 .card{
   background:var(--glass);
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
   border-radius:22px;
   padding:22px;
-  box-shadow:0 0 40px rgba(199,125,255,.25);
   transition:.4s;
 }
 
 .card:hover{
-  transform:translateY(-10px) scale(1.03);
-  box-shadow:0 0 70px rgba(199,125,255,.5);
+  transform:translateY(-8px);
 }
 
+/* CROSSHAIR */
 .code{
+  font-family:monospace;
   background:#000;
   padding:10px;
   border-radius:10px;
-  font-family:monospace;
-  color:var(--neon);
   margin-top:10px;
+  color:var(--accent);
   display:flex;
   justify-content:space-between;
-  align-items:center;
 }
 
-.copy{
-  cursor:pointer;
-  font-size:12px;
-  opacity:.7;
+.copy{cursor:pointer;font-size:12px}
+
+/* SETTINGS */
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
 }
-.copy:hover{opacity:1}
+.toggle button{
+  background:#000;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
+<div id="intro"><h1>NOVA</h1></div>
+<div class="blur b1"></div>
+<div class="blur b2"></div>
 
 <nav>
-  <h1>NOVA</h1>
+  <h2>NOVA</h2>
   <div>
-    <button class="active" onclick="openScreen('home',this)">Ana</button>
-    <button onclick="openScreen('cross',this)">Crosshair</button>
+    <button class="active" onclick="openScreen('cross',this)">Crosshair</button>
     <button onclick="openScreen('agents',this)">Ajanlar</button>
+    <button onclick="openScreen('settings',this)">FPS</button>
     <button onclick="openScreen('guides',this)">Rehber</button>
   </div>
 </nav>
 
-<div id="home" class="screen active">
-  <h2 class="title">NOVA Valorant Hub</h2>
-  <p>Uzay temalı profesyonel Valorant vitrin arayüzü.</p>
-</div>
-
-<div id="cross" class="screen">
-  <h2 class="title">Pro Crosshair Kodları</h2>
+<!-- CROSSHAIR -->
+<div id="cross" class="screen active">
   <div class="grid">
-    <div class="card">
-      <h3>TenZ</h3>
-      <div class="code">
-        <span>0;s;1;P;c;5;h;0;0l;4</span>
-        <span class="copy" onclick="copyCode(this)">Kopyala</span>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Derke</h3>
-      <div class="code">
-        <span>0;P;c;1;o;1;d;1;z;3</span>
-        <span class="copy" onclick="copyCode(this)">Kopyala</span>
-      </div>
-    </div>
+    <div class="card"><h3>TenZ</h3><div class="code"><span>0;s;1;P;c;5;h;0;0l;4</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
+    <div class="card"><h3>Derke</h3><div class="code"><span>0;P;c;1;o;1;d;1;z;3</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
+    <div class="card"><h3>yay</h3><div class="code"><span>0;s;1;P;c;8;o;1</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
+    <div class="card"><h3>ScreaM</h3><div class="code"><span>0;P;c;7;o;1;d;1</span><span class="copy" onclick="copy(this)">Kopyala</span></div></div>
   </div>
 </div>
 
+<!-- AGENTS -->
 <div id="agents" class="screen">
-  <h2 class="title">Ajanlar</h2>
   <div class="grid">
-    <div class="card"><h3>Jett</h3><p>Duelist – Hızlı giriş</p></div>
-    <div class="card"><h3>Omen</h3><p>Controller – Alan kontrolü</p></div>
-    <div class="card"><h3>Sage</h3><p>Sentinel – Destek</p></div>
+    <div class="card"><h3>Jett</h3><p>Duelist – Entry</p></div>
+    <div class="card"><h3>Omen</h3><p>Controller – Map Control</p></div>
+    <div class="card"><h3>Sova</h3><p>Initiator – Info</p></div>
   </div>
 </div>
 
+<!-- FPS -->
+<div id="settings" class="screen">
+  <div class="card">
+    <h3>FPS Optimizasyonu</h3>
+    <div class="toggle">
+      <span>Blur Efektleri</span>
+      <button onclick="toggleBlur()">Aç / Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDES -->
 <div id="guides" class="screen">
-  <h2 class="title">Rehberler</h2>
   <div class="grid">
-    <div class="card">Aim Geliştirme</div>
-    <div class="card">FPS Optimizasyonu</div>
-    <div class="card">Rank Mantığı</div>
+    <div class="card">Aim Training Rutini</div>
+    <div class="card">Sensitivity Mantığı</div>
+    <div class="card">Rank Yükselme Stratejileri</div>
   </div>
 </div>
 
 <script>
-/* SCREEN SWITCH */
 function openScreen(id,btn){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
 }
 
-/* COPY */
-function copyCode(el){
-  const text = el.previousElementSibling.innerText;
-  navigator.clipboard.writeText(text);
-  el.innerText="Kopyalandı";
-  setTimeout(()=>el.innerText="Kopyala",1200);
+function copy(el){
+ const t=el.previousElementSibling.innerText;
+ navigator.clipboard.writeText(t);
+ el.innerText="Kopyalandı";
+ setTimeout(()=>el.innerText="Kopyala",1000);
 }
 
-/* MATRIX */
-const canvas=document.getElementById("matrix");
-const ctx=canvas.getContext("2d");
-
-function resize(){
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+function toggleBlur(){
+ document.querySelectorAll('.blur').forEach(b=>{
+  b.style.display = b.style.display==="none"?"block":"none";
+ });
 }
-resize();
-addEventListener("resize",resize);
-
-const letters="01NOVA";
-const font=14;
-let cols, drops;
-
-function resetMatrix(){
-  cols=Math.floor(canvas.width/font);
-  drops=Array(cols).fill(1);
-}
-resetMatrix();
-
-function draw(){
- ctx.fillStyle="rgba(0,0,0,.05)";
- ctx.fillRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle="#c77dff";
- ctx.font=font+"px monospace";
-
- for(let i=0;i<drops.length;i++){
-  const t=letters[Math.floor(Math.random()*letters.length)];
-  ctx.fillText(t,i*font,drops[i]*font);
-  if(drops[i]*font>canvas.height&&Math.random()>0.975)drops[i]=0;
-  drops[i]++;
- }
-}
-setInterval(draw,33);
 </script>
 
 </body>
