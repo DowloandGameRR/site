@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>VALO HUB</title>
+<title>NOVA | Valorant Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -10,7 +10,6 @@
 <style>
 :root{
   --neon:#c77dff;
-  --bg:#05010a;
   --glass:rgba(255,255,255,.08);
 }
 
@@ -18,13 +17,12 @@
 
 body{
   font-family:Inter,sans-serif;
-  background:url("bg.jpg") center/cover fixed no-repeat;
+  background:url("https://i.pinimg.com/1200x/57/fd/58/57fd588efe6978501636b1f438f94905.jpg") center/cover fixed no-repeat;
   color:#fff;
-  min-height:100vh;
+  height:100vh;
   overflow:hidden;
 }
 
-/* BACKGROUND OVERLAY */
 body::before{
   content:"";
   position:fixed;
@@ -39,7 +37,7 @@ canvas{
   position:fixed;
   inset:0;
   z-index:-1;
-  opacity:.15;
+  opacity:.18;
 }
 
 /* NAVBAR */
@@ -49,37 +47,37 @@ nav{
   align-items:center;
   justify-content:space-between;
   padding:0 40px;
-  background:rgba(0,0,0,.5);
-  backdrop-filter:blur(10px);
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(12px);
 }
 
 nav h1{
   font-family:Orbitron;
   color:var(--neon);
+  letter-spacing:3px;
 }
 
 nav button{
   background:none;
   border:none;
   color:#fff;
-  margin-left:20px;
+  margin-left:22px;
   font-size:15px;
   cursor:pointer;
   position:relative;
 }
 
-nav button::after{
+nav button.active::after,
+nav button:hover::after{
   content:"";
   position:absolute;
   left:0;
-  bottom:-6px;
-  width:0;
+  bottom:-8px;
+  width:100%;
   height:2px;
   background:var(--neon);
-  transition:.3s;
+  box-shadow:0 0 12px var(--neon);
 }
-
-nav button:hover::after{width:100%}
 
 /* SCREENS */
 .screen{
@@ -100,32 +98,32 @@ nav button:hover::after{width:100%}
   to{opacity:1;transform:none}
 }
 
-/* CARDS */
+/* UI */
+.title{
+  font-family:Orbitron;
+  font-size:34px;
+  margin-bottom:30px;
+  color:var(--neon);
+}
+
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
+  gap:22px;
 }
 
 .card{
   background:var(--glass);
   backdrop-filter:blur(14px);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 0 40px rgba(199,125,255,.2);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 0 40px rgba(199,125,255,.25);
   transition:.4s;
 }
 
 .card:hover{
   transform:translateY(-10px) scale(1.03);
-  box-shadow:0 0 60px rgba(199,125,255,.45);
-}
-
-.title{
-  font-family:Orbitron;
-  font-size:32px;
-  margin-bottom:30px;
-  color:var(--neon);
+  box-shadow:0 0 70px rgba(199,125,255,.5);
 }
 
 .code{
@@ -135,7 +133,17 @@ nav button:hover::after{width:100%}
   font-family:monospace;
   color:var(--neon);
   margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
+
+.copy{
+  cursor:pointer;
+  font-size:12px;
+  opacity:.7;
+}
+.copy:hover{opacity:1}
 </style>
 </head>
 
@@ -144,106 +152,106 @@ nav button:hover::after{width:100%}
 <canvas id="matrix"></canvas>
 
 <nav>
-  <h1>VALO HUB</h1>
+  <h1>NOVA</h1>
   <div>
-    <button onclick="openScreen('home')">Ana</button>
-    <button onclick="openScreen('cross')">Crosshair</button>
-    <button onclick="openScreen('agents')">Ajanlar</button>
-    <button onclick="openScreen('guides')">Rehber</button>
+    <button class="active" onclick="openScreen('home',this)">Ana</button>
+    <button onclick="openScreen('cross',this)">Crosshair</button>
+    <button onclick="openScreen('agents',this)">Ajanlar</button>
+    <button onclick="openScreen('guides',this)">Rehber</button>
   </div>
 </nav>
 
-<!-- HOME -->
 <div id="home" class="screen active">
-  <h2 class="title">Valorant Uzay Merkezi</h2>
-  <p>Profesyonel oyuncular için hazırlanmış vitrin platformu.</p>
+  <h2 class="title">NOVA Valorant Hub</h2>
+  <p>Uzay temalı profesyonel Valorant vitrin arayüzü.</p>
 </div>
 
-<!-- CROSSHAIR -->
 <div id="cross" class="screen">
   <h2 class="title">Pro Crosshair Kodları</h2>
   <div class="grid">
     <div class="card">
       <h3>TenZ</h3>
-      <div class="code">0;s;1;P;c;5;h;0;0l;4;0o;2;0a;1</div>
+      <div class="code">
+        <span>0;s;1;P;c;5;h;0;0l;4</span>
+        <span class="copy" onclick="copyCode(this)">Kopyala</span>
+      </div>
     </div>
     <div class="card">
       <h3>Derke</h3>
-      <div class="code">0;P;c;1;o;1;d;1;z;3;a;1</div>
-    </div>
-    <div class="card">
-      <h3>yay</h3>
-      <div class="code">0;s;1;P;c;8;o;1;0t;4;0l;1</div>
+      <div class="code">
+        <span>0;P;c;1;o;1;d;1;z;3</span>
+        <span class="copy" onclick="copyCode(this)">Kopyala</span>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- AGENTS -->
 <div id="agents" class="screen">
   <h2 class="title">Ajanlar</h2>
   <div class="grid">
-    <div class="card">
-      <h3>Jett</h3>
-      <p>Duelist – Hızlı giriş uzmanı</p>
-      <ul>
-        <li>Dash</li>
-        <li>Updraft</li>
-        <li>Blade Storm</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Omen</h3>
-      <p>Controller – Harita kontrolü</p>
-      <ul>
-        <li>Smoke</li>
-        <li>Blind</li>
-        <li>Teleport</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Sage</h3>
-      <p>Sentinel – Destek</p>
-      <ul>
-        <li>Wall</li>
-        <li>Slow</li>
-        <li>Resurrection</li>
-      </ul>
-    </div>
+    <div class="card"><h3>Jett</h3><p>Duelist – Hızlı giriş</p></div>
+    <div class="card"><h3>Omen</h3><p>Controller – Alan kontrolü</p></div>
+    <div class="card"><h3>Sage</h3><p>Sentinel – Destek</p></div>
   </div>
 </div>
 
-<!-- GUIDES -->
 <div id="guides" class="screen">
   <h2 class="title">Rehberler</h2>
   <div class="grid">
     <div class="card">Aim Geliştirme</div>
     <div class="card">FPS Optimizasyonu</div>
-    <div class="card">Rank Stratejileri</div>
+    <div class="card">Rank Mantığı</div>
   </div>
 </div>
 
 <script>
-function openScreen(id){
+/* SCREEN SWITCH */
+function openScreen(id,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* COPY */
+function copyCode(el){
+  const text = el.previousElementSibling.innerText;
+  navigator.clipboard.writeText(text);
+  el.innerText="Kopyalandı";
+  setTimeout(()=>el.innerText="Kopyala",1200);
 }
 
 /* MATRIX */
-const c=document.getElementById("matrix"),ctx=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-const letters="01VALORANT";
-const font=14;const cols=c.width/font;
-const drops=Array(cols).fill(1);
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
+resize();
+addEventListener("resize",resize);
+
+const letters="01NOVA";
+const font=14;
+let cols, drops;
+
+function resetMatrix(){
+  cols=Math.floor(canvas.width/font);
+  drops=Array(cols).fill(1);
+}
+resetMatrix();
 
 function draw(){
  ctx.fillStyle="rgba(0,0,0,.05)";
- ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillRect(0,0,canvas.width,canvas.height);
  ctx.fillStyle="#c77dff";
  ctx.font=font+"px monospace";
+
  for(let i=0;i<drops.length;i++){
   const t=letters[Math.floor(Math.random()*letters.length)];
   ctx.fillText(t,i*font,drops[i]*font);
-  if(drops[i]*font>c.height&&Math.random()>0.975)drops[i]=0;
+  if(drops[i]*font>canvas.height&&Math.random()>0.975)drops[i]=0;
   drops[i]++;
  }
 }
