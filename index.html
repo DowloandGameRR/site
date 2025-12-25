@@ -177,7 +177,10 @@
       box-shadow: 0 0 60px var(--primary-glow);
     }
 
-    @keyframes spin { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     .loading-text {
       font-size: 1.8rem;
@@ -185,7 +188,10 @@
       animation: pulse 2s infinite;
     }
 
-    @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.7;} }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
 
     /* Sidebar */
     .sidebar {
@@ -355,7 +361,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mobil */
+    /* Mobil Uyum */
     @media (max-width: 768px) {
       .sidebar { width: 70px; }
       .sidebar:hover { width: 260px; }
@@ -445,7 +451,7 @@
     const sidebar = document.querySelector('.sidebar');
     const loadingScreen = document.getElementById('globalLoading');
 
-    // Beni hatırla kontrolü
+    // Beni hatırla kontrolü (localStorage)
     if (localStorage.getItem('novaKey') === 'novabest') {
       authContainer.style.display = 'none';
       mainContent.style.display = 'block';
@@ -469,6 +475,8 @@
 
           if (rememberCheckbox.checked) {
             localStorage.setItem('novaKey', 'novabest');
+          } else {
+            localStorage.removeItem('novaKey');
           }
 
           authContainer.style.display = 'none';
@@ -479,29 +487,29 @@
           loadPage('home');
         }, 3000);
       } else {
-        alert('Geçersiz anahtar! Anahtar: novabest');
+        alert('Geçersiz anahtar! Doğru anahtar: novabest');
       }
     });
 
-    // Sayfa içerikleri
+    // Sayfa içerikleri (Ana sayfa tam istediğin gibi)
     const pages = {
       home: `
-        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:2.5rem;">Hoş Geldin, Nova Elite</h2>
+        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:3rem;">Hoş Geldin, Nova Elite</h2>
         <p style="font-size:1.4rem; text-align:center; margin-bottom:3rem;">İsim ve soyisimden TC bulma gücü elinde!</p>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;">
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2rem; text-align:center;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
+          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
             <h3>İsimden TC Bul</h3>
             <p>Ad + Soyad ile eşleşme</p>
           </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2rem; text-align:center;">
+          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
             <h3>Ultra Hız</h3>
             <p>Ortalama 5-12 saniye</p>
           </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2rem; text-align:center;">
+          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
             <h3>30+ Kategori</h3>
             <p>Tüm sorgular isim bazlı</p>
           </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2rem; text-align:center;">
+          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
             <h3>7/24 Online</h3>
             <p>Her zaman hazır</p>
           </div>
