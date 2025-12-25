@@ -187,16 +187,7 @@
 
     @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.7;} }
 
-    /* Sidebar ve Ana İçerik (Giriş sonrası görünür) */
-    .sidebar, .main-content {
-      display: none;
-    }
-
-    .logged-in .sidebar,
-    .logged-in .main-content {
-      display: block;
-    }
-
+    /* Sidebar */
     .sidebar {
       position: fixed;
       left: 0; top: 0; bottom: 0;
@@ -209,12 +200,69 @@
       z-index: 1000;
       box-shadow: 4px 0 50px rgba(139,92,246,0.4);
       transition: var(--transition);
+      display: none;
     }
 
+    .logo {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      text-shadow: 0 0 40px var(--primary-glow);
+      text-align: center;
+      animation: neonPulse 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      from { text-shadow: 0 0 20px var(--primary-glow); }
+      to { text-shadow: 0 0 60px var(--primary-glow); }
+    }
+
+    .nav-list { list-style: none; }
+    .nav-item { margin: 0.6rem 0; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 1.2rem 1.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 14px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: rgba(139,92,246,0.3);
+      color: white;
+      transform: translateX(15px) scale(1.05);
+      box-shadow: 0 0 40px rgba(139,92,246,0.6);
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+      transition: left 0.8s;
+    }
+
+    .nav-link:hover::before { left: 100%; }
+
+    .nav-link i { margin-right: 14px; width: 24px; text-align: center; }
+
+    /* Ana İçerik */
     .main-content {
       margin-left: var(--sidebar-width);
       padding: 3rem 4rem;
       transition: var(--transition);
+      display: none;
+    }
+
+    .header {
+      margin-bottom: 2.5rem;
+      text-align: center;
     }
 
     .header h1 {
@@ -222,7 +270,6 @@
       color: var(--primary);
       text-shadow: 0 0 60px var(--primary-glow);
       animation: headerGlow 4s infinite alternate;
-      text-align: center;
     }
 
     @keyframes headerGlow {
@@ -307,10 +354,20 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Mobil */
+    @media (max-width: 768px) {
+      .sidebar { width: 70px; }
+      .sidebar:hover { width: 260px; }
+      .nav-link span { opacity: 0; }
+      .sidebar:hover .nav-link span { opacity: 1; }
+      .main-content { margin-left: 70px; padding: 1.5rem; }
+      .sidebar:hover + .main-content { margin-left: 260px; }
+    }
   </style>
 </head>
 <body>
-  <!-- Kayıt/Giriş Ekranı -->
+  <!-- Key Giriş Ekranı -->
   <div class="auth-container" id="authContainer">
     <div class="auth-box">
       <div class="auth-header">
@@ -334,7 +391,7 @@
     </div>
   </div>
 
-  <!-- Tam Ekran Loading -->
+  <!-- Loading Ekranı -->
   <div class="loading-screen" id="globalLoading">
     <div class="spinner"></div>
     <div class="loading-text">Nova Gücü Aktif... Doğrulanıyor</div>
@@ -377,24 +434,24 @@
     </div>
 
     <div class="form-container" id="contentArea">
-      <!-- İçerik dinamik yüklenecek -->
+      <!-- İçerik buraya dinamik yüklenecek -->
     </div>
   </div>
 
   <script>
-    // Sayfa yüklenince giriş ekranı göster
+    // Sayfa yüklenince key giriş ekranı göster
     const authContainer = document.getElementById('authContainer');
     const mainContent = document.getElementById('mainContent');
     const sidebar = document.querySelector('.sidebar');
     const loadingScreen = document.getElementById('globalLoading');
 
-    // LocalStorage'dan "hatırla" kontrolü
+    // Beni hatırla kontrolü
     if (localStorage.getItem('novaKey') === 'novabest') {
       authContainer.style.display = 'none';
       mainContent.style.display = 'block';
       sidebar.style.display = 'block';
       document.body.classList.add('logged-in');
-      loadPage('home'); // İlk sayfayı yükle
+      loadPage('home');
     }
 
     const authForm = document.getElementById('authForm');
@@ -402,7 +459,7 @@
 
     authForm.addEventListener('submit', e => {
       e.preventDefault();
-      const key = document.getElementById('key').value.trim();
+      const key = document.getElementById('key').value.trim().toLowerCase();
 
       if (key === 'novabest') {
         loadingScreen.style.display = 'flex';
@@ -422,11 +479,11 @@
           loadPage('home');
         }, 3000);
       } else {
-        alert('Geçersiz anahtar!');
+        alert('Geçersiz anahtar! Anahtar: novabest');
       }
     });
 
-    // Sayfa içerikleri (önceki kodlardan)
+    // Sayfa içerikleri
     const pages = {
       home: `
         <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:2.5rem;">Hoş Geldin, Nova Elite</h2>
