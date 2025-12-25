@@ -9,7 +9,6 @@
     :root {
       --primary: #8b5cf6;
       --primary-dark: #7c3aed;
-      --primary-darker: #6d28d9;
       --primary-glow: rgba(139, 92, 246, 0.8);
       --bg-start: #0a001a;
       --bg-end: #1a0a2a;
@@ -60,10 +59,10 @@
     .auth-box {
       background: var(--bg-card);
       border-radius: 20px;
-      padding: 3rem 2.5rem;
+      padding: 3.5rem 3rem;
       width: 100%;
-      max-width: 450px;
-      box-shadow: 0 0 80px rgba(139,92,246,0.6);
+      max-width: 480px;
+      box-shadow: 0 0 100px rgba(139,92,246,0.6);
       border: 1px solid rgba(139,92,246,0.5);
       animation: authFadeIn 1s ease;
     }
@@ -75,86 +74,86 @@
 
     .auth-header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     .auth-header h1 {
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       color: var(--primary);
-      text-shadow: 0 0 30px var(--primary-glow);
+      text-shadow: 0 0 40px var(--primary-glow);
       margin-bottom: 0.5rem;
+      animation: glow 3s infinite alternate;
     }
 
-    .auth-header p {
-      color: var(--text-muted);
-      font-size: 1.1rem;
+    @keyframes glow {
+      from { text-shadow: 0 0 20px var(--primary-glow); }
+      to { text-shadow: 0 0 60px var(--primary-glow); }
     }
 
     .form-group {
-      margin-bottom: 1.8rem;
+      margin-bottom: 2rem;
     }
 
     label {
       display: block;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.8rem;
       color: var(--text-muted);
       font-weight: 500;
+      font-size: 1.1rem;
     }
 
     input {
       width: 100%;
-      padding: 1.2rem;
+      padding: 1.4rem;
       background: rgba(139,92,246,0.1);
       border: 1px solid rgba(139,92,246,0.5);
       border-radius: 12px;
       color: var(--text);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       transition: all 0.3s;
     }
 
     input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 20px rgba(139,92,246,0.5);
+      box-shadow: 0 0 25px rgba(139,92,246,0.5);
     }
 
     .btn {
       width: 100%;
-      padding: 1.3rem;
+      padding: 1.4rem;
       background: var(--primary);
       color: white;
       border: none;
       border-radius: 12px;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 0 30px rgba(139,92,246,0.4);
+      transition: all 0.4s;
+      box-shadow: 0 0 40px rgba(139,92,246,0.5);
     }
 
     .btn:hover {
       background: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(139,92,246,0.6);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(139,92,246,0.7);
     }
 
-    .toggle-link {
-      text-align: center;
-      margin-top: 1.5rem;
+    .checkbox-group {
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
       color: var(--text-muted);
+      font-size: 1rem;
     }
 
-    .toggle-link a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: bold;
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      accent-color: var(--primary);
     }
 
-    .toggle-link a:hover {
-      text-decoration: underline;
-    }
-
-    /* Loading Ekranı */
     .loading-screen {
       position: fixed;
       inset: 0;
@@ -174,41 +173,139 @@
       border-top: 10px solid var(--primary);
       border-radius: 50%;
       animation: spin 1.2s linear infinite;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       box-shadow: 0 0 60px var(--primary-glow);
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }
 
     .loading-text {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       text-shadow: 0 0 20px var(--primary-glow);
       animation: pulse 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
+    @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.7;} }
 
-    /* Ana Sayfa İçeriği (Giriş yaptıktan sonra görünür) */
-    .main-content {
-      display: none;
-      margin-left: var(--sidebar-width);
-      padding: 3rem 4rem;
-      min-height: 100vh;
-    }
-
-    .sidebar {
+    /* Sidebar ve Ana İçerik (Giriş sonrası görünür) */
+    .sidebar, .main-content {
       display: none;
     }
 
     .logged-in .sidebar,
     .logged-in .main-content {
       display: block;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, rgba(17,24,39,0.95) 0%, rgba(15,23,42,0.95) 100%);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(139,92,246,0.5);
+      padding: 1.5rem 1rem;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 4px 0 50px rgba(139,92,246,0.4);
+      transition: var(--transition);
+    }
+
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 3rem 4rem;
+      transition: var(--transition);
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      color: var(--primary);
+      text-shadow: 0 0 60px var(--primary-glow);
+      animation: headerGlow 4s infinite alternate;
+      text-align: center;
+    }
+
+    @keyframes headerGlow {
+      from { text-shadow: 0 0 40px var(--primary-glow); }
+      to { text-shadow: 0 0 100px var(--primary-glow); }
+    }
+
+    .form-container {
+      background: var(--bg-card);
+      border-radius: 24px;
+      border: 1px solid rgba(139,92,246,0.5);
+      padding: 3rem;
+      box-shadow: 0 30px 80px rgba(139,92,246,0.3);
+      max-width: 850px;
+      margin: 0 auto;
+      animation: fadeInScale 1.2s ease-out;
+      position: relative;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .form-group { margin-bottom: 2rem; }
+    label { display: block; margin-bottom: 0.8rem; font-weight: 500; color: var(--text-muted); font-size: 1.1rem; }
+    input[type="text"], input[type="tel"], textarea {
+      width: 100%;
+      padding: 1.2rem;
+      background: rgba(139,92,246,0.08);
+      border: 1px solid rgba(139,92,246,0.5);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(139,92,246,0.6);
+      transform: scale(1.02);
+    }
+
+    .btn {
+      padding: 1.3rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      box-shadow: 0 0 30px rgba(139,92,246,0.4);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 20px 60px rgba(139,92,246,0.7);
+    }
+
+    .result-box {
+      margin-top: 2.5rem;
+      padding: 2rem;
+      background: rgba(139,92,246,0.2);
+      border: 1px solid var(--primary);
+      border-radius: 14px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      color: #e0e7ff;
+      display: none;
+      animation: resultFadeIn 0.8s ease;
+      text-align: center;
+      font-size: 1.2rem;
+      box-shadow: 0 0 40px rgba(139,92,246,0.5);
+    }
+
+    @keyframes resultFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -217,35 +314,30 @@
   <div class="auth-container" id="authContainer">
     <div class="auth-box">
       <div class="auth-header">
-        <h1 id="authTitle">Nova Panel</h1>
-        <p id="authDesc">Lütfen giriş yap veya kayıt ol</p>
+        <h1>Nova Panel</h1>
+        <p>Lütfen erişim anahtarını gir</p>
       </div>
 
       <form id="authForm">
         <div class="form-group">
-          <label for="username">Kullanıcı Adı</label>
-          <input type="text" id="username" placeholder="Kullanıcı adınızı girin" required>
+          <label for="key">Erişim Anahtarı</label>
+          <input type="text" id="key" placeholder="Anahtarı buraya yazın" required>
         </div>
 
-        <div class="form-group">
-          <label for="password">Şifre</label>
-          <input type="password" id="password" placeholder="Şifrenizi girin" required>
+        <div class="checkbox-group">
+          <input type="checkbox" id="remember">
+          <label for="remember">Beni hatırla (30 gün)</label>
         </div>
 
-        <button type="submit" class="btn" id="authBtn">Giriş Yap</button>
+        <button type="submit" class="btn">Giriş Yap</button>
       </form>
-
-      <div class="toggle-link">
-        <span id="toggleText">Hesabın yok mu?</span>
-        <a href="#" id="toggleLink">Kayıt Ol</a>
-      </div>
     </div>
   </div>
 
-  <!-- Loading Ekranı -->
+  <!-- Tam Ekran Loading -->
   <div class="loading-screen" id="globalLoading">
     <div class="spinner"></div>
-    <div class="loading-text">Nova Gücü Aktif... İşleniyor</div>
+    <div class="loading-text">Nova Gücü Aktif... Doğrulanıyor</div>
   </div>
 
   <!-- Sidebar -->
@@ -290,66 +382,51 @@
   </div>
 
   <script>
-    // Sayfa yüklenince login ekranı göster
-    document.body.classList.remove('logged-in');
-
-    // Kayıt/Giriş toggle
-    const authForm = document.getElementById('authForm');
-    const authTitle = document.getElementById('authTitle');
-    const authDesc = document.getElementById('authDesc');
-    const toggleLink = document.getElementById('toggleLink');
-    const toggleText = document.getElementById('toggleText');
-    const authBtn = document.getElementById('authBtn');
+    // Sayfa yüklenince giriş ekranı göster
+    const authContainer = document.getElementById('authContainer');
+    const mainContent = document.getElementById('mainContent');
+    const sidebar = document.querySelector('.sidebar');
     const loadingScreen = document.getElementById('globalLoading');
 
-    let isLogin = true;
+    // LocalStorage'dan "hatırla" kontrolü
+    if (localStorage.getItem('novaKey') === 'novabest') {
+      authContainer.style.display = 'none';
+      mainContent.style.display = 'block';
+      sidebar.style.display = 'block';
+      document.body.classList.add('logged-in');
+      loadPage('home'); // İlk sayfayı yükle
+    }
 
-    toggleLink.addEventListener('click', e => {
-      e.preventDefault();
-      isLogin = !isLogin;
-      if (isLogin) {
-        authTitle.textContent = "Nova Panel";
-        authDesc.textContent = "Lütfen giriş yap veya kayıt ol";
-        authBtn.textContent = "Giriş Yap";
-        toggleText.textContent = "Hesabın yok mu?";
-        toggleLink.textContent = "Kayıt Ol";
-      } else {
-        authTitle.textContent = "Kayıt Ol";
-        authDesc.textContent = "Yeni hesap oluştur";
-        authBtn.textContent = "Kayıt Ol";
-        toggleText.textContent = "Zaten hesabın var mı?";
-        toggleLink.textContent = "Giriş Yap";
-      }
-    });
+    const authForm = document.getElementById('authForm');
+    const rememberCheckbox = document.getElementById('remember');
 
-    // Form submit (simüle edilmiş kayıt/giriş)
     authForm.addEventListener('submit', e => {
       e.preventDefault();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const key = document.getElementById('key').value.trim();
 
-      if (!username || !password) {
-        alert('Kullanıcı adı ve şifre zorunlu!');
-        return;
+      if (key === 'novabest') {
+        loadingScreen.style.display = 'flex';
+
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+
+          if (rememberCheckbox.checked) {
+            localStorage.setItem('novaKey', 'novabest');
+          }
+
+          authContainer.style.display = 'none';
+          mainContent.style.display = 'block';
+          sidebar.style.display = 'block';
+          document.body.classList.add('logged-in');
+
+          loadPage('home');
+        }, 3000);
+      } else {
+        alert('Geçersiz anahtar!');
       }
-
-      // Loading göster
-      loadingScreen.style.display = 'flex';
-
-      // 3 saniye bekle (gerçekte backend'e istek atılabilir)
-      setTimeout(() => {
-        loadingScreen.style.display = 'none';
-
-        // Simüle giriş/kayıt başarılı
-        alert(isLogin ? 'Giriş başarılı!' : 'Kayıt başarılı! Artık giriş yapabilirsin.');
-        document.body.classList.add('logged-in');
-
-        // İlk sayfayı yükle
-        loadPage('home');
-      }, 3000);
     });
 
-    // Sayfa içerikleri
+    // Sayfa içerikleri (önceki kodlardan)
     const pages = {
       home: `
         <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:2.5rem;">Hoş Geldin, Nova Elite</h2>
@@ -373,6 +450,7 @@
           </div>
         </div>
       `,
+
       market: `
         <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem;">Premium Üyelik Paketleri</h2>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;">
@@ -436,7 +514,6 @@
           { label: "İl / İlce (isteğe bağlı)", type: "text", id: "il", placeholder: "Örn: İstanbul / Beşiktaş" }
         ]
       },
-      // Diğer sorgular (kısaltmak için sadece bir tane örnek verdim, diğerleri benzer)
       aile: {
         title: "Aile & Yakınlar Sorgulama",
         fields: [
@@ -445,7 +522,101 @@
           { label: "Anne Adı (isteğe bağlı)", type: "text", id: "anneadi", placeholder: "Anne adı" }
         ]
       },
-      // ... diğer sorgular aynı şekilde eklenebilir
+      ehliyet: {
+        title: "Ehliyet & Araç Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Plaka (isteğe bağlı)", type: "text", id: "plaka", placeholder: "34 ABC 123" }
+        ]
+      },
+      banka: {
+        title: "Banka Hesapları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      vergi: {
+        title: "Vergi Borçları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      icra: {
+        title: "İcra Dosyaları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      kredi: {
+        title: "Kredi Notu Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      adli: {
+        title: "Adli Sicil Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      sosyal: {
+        title: "Sosyal Medya Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Kullanıcı Adı Tahmini (isteğe bağlı)", type: "text", id: "kullaniciadi", placeholder: "Örn: ahmetyilmaz90" }
+        ]
+      },
+      edevlet: {
+        title: "e-Devlet Log Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      saglik: {
+        title: "Sağlık Kayıtları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      pasaport: {
+        title: "Pasaport & Vize Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      sgk: {
+        title: "SGK Hizmet Dökümü Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      okul: {
+        title: "Eğitim & Diploma Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Okul Adı (isteğe bağlı)", type: "text", id: "okul", placeholder: "Okul / Üniversite" }
+        ]
+      },
+      yabanci: {
+        title: "Yabancı Uyruklu Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Uyruk (isteğe bağlı)", type: "text", id: "uyruk", placeholder: "Örn: Almanya" }
+        ]
+      }
     };
 
     const contentArea = document.getElementById('contentArea');
