@@ -1,1 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nova Panel - Premium Sorgu Sistemi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-dark: #7c3aed;
+      --primary-darker: #6d28d9;
+      --primary-glow: rgba(139, 92, 246, 0.9);
+      --bg-start: #0a001a;
+      --bg-end: #1a0a2a;
+      --bg-card: rgba(17,24,39,0.92);
+      --text: #e0e7ff;
+      --text-muted: #a5b4fc;
+      --sidebar-width: 280px;
+      --transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><circle fill="%23ffffff" opacity="0.12" cx="30" cy="40" r="1.5"/><circle fill="%23ffffff" opacity="0.18" cx="90" cy="70" r="2"/><circle fill="%23ffffff" opacity="0.1" cx="60" cy="110" r="1.2"/></svg>') repeat;
+      opacity: 0.5;
+      animation: stars 180s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes stars {
+      from { background-position: 0 0; }
+      to { background-position: 240px 240px; }
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, rgba(17,24,39,0.97) 0%, rgba(15,23,42,0.97) 100%);
+      backdrop-filter: blur(15px);
+      border-right: 1px solid rgba(139,92,246,0.6);
+      padding: 2rem 1rem;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 0 60px rgba(139,92,246,0.4);
+      transition: var(--transition);
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--primary);
+      text-shadow: 0 0 50px var(--primary-glow), 0 0 100px var(--primary-glow);
+      text-align: center;
+      animation: neonPulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      from { text-shadow: 0 0 30px var(--primary-glow), 0 0 70px var(--primary-glow); }
+      to { text-shadow: 0 0 70px var(--primary-glow), 0 0 140px var(--primary-glow); }
+    }
+
+    .nav-list { list-style: none; }
+    .nav-item { margin: 0.8rem 0; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 1.4rem 1.6rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 16px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: rgba(139,92,246,0.35);
+      color: white;
+      transform: translateX(18px) scale(1.06);
+      box-shadow: 0 0 50px rgba(139,92,246,0.7);
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.5), transparent);
+      transition: left 1s ease;
+    }
+
+    .nav-link:hover::before { left: 100%; }
+
+    .nav-link i { margin-right: 16px; width: 26px; text-align: center; font-size: 1.3rem; }
+
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 4rem 5rem;
+      transition: var(--transition);
+    }
+
+    .header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 4.5rem;
+      color: var(--primary);
+      text-shadow: 0 0 80px var(--primary-glow);
+      animation: headerGlow 5s infinite alternate;
+    }
+
+    @keyframes headerGlow {
+      from { text-shadow: 0 0 50px var(--primary-glow); }
+      to { text-shadow: 0 0 120px var(--primary-glow); }
+    }
+
+    .form-container {
+      background: var(--bg-card);
+      border-radius: 28px;
+      border: 1px solid rgba(139,92,246,0.6);
+      padding: 4rem;
+      box-shadow: 0 40px 100px rgba(139,92,246,0.4);
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeInScale 1.5s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .form-group { margin-bottom: 2.5rem; }
+    label { display: block; margin-bottom: 1rem; font-weight: 600; color: var(--text-muted); font-size: 1.2rem; }
+    input[type="text"], input[type="tel"], textarea {
+      width: 100%;
+      padding: 1.4rem;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.6);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 40px rgba(139,92,246,0.7);
+      transform: scale(1.03);
+    }
+
+    .btn {
+      padding: 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      box-shadow: 0 0 40px rgba(139,92,246,0.5);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 30px 80px rgba(139,92,246,0.8);
+    }
+
+    /* Tam Ekran Loading */
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,26,0.98);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: var(--primary);
+    }
+
+    .spinner {
+      width: 120px;
+      height: 120px;
+      border: 14px solid rgba(139,92,246,0.2);
+      border-top: 14px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+      margin-bottom: 40px;
+      box-shadow: 0 0 80px rgba(139,92,246,0.8);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-shadow: 0 0 40px var(--primary-glow);
+      animation: pulseText 2.5s infinite;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    .result-box {
+      margin-top: 3rem;
+      padding: 2.5rem;
+      background: rgba(139,92,246,0.25);
+      border: 2px solid var(--primary);
+      border-radius: 18px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 1.4rem;
+      text-align: center;
+      color: #e0e7ff;
+      display: none;
+      animation: resultFadeIn 1s ease;
+    }
+
+    @keyframes resultFadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobil */
+    @media (max-width: 768px) {
+      .sidebar { width: 80px; }
+      .sidebar:hover { width: 280px; }
+      .nav-link span { opacity: 0; }
+      .sidebar:hover .nav-link span { opacity: 1; }
+      .main-content { margin-left: 80px; padding: 2rem; }
+      .sidebar:hover + .main-content { margin-left: 280px; }
+      .header h1 { font-size: 3rem; }
+      .form-container { padding: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Tam Ekran Loading -->
+  <div class="loading-screen" id="globalLoading">
+    <div class="spinner"></div>
+    <div class="loading-text">Nova Gücü Aktif... Sorgu Hazırlanıyor</div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">NOVA</div>
+      <p style="font-size:1rem; color:var(--text-muted); text-align:center; margin-top:1rem;">İsimden TC Bulma Sistemi</p>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item"><a class="nav-link active" data-page="home"><i class="fas fa-home"></i><span>Ana Sayfa</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="mernis"><i class="fas fa-id-card"></i><span>Mernis / Nüfus</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="adres"><i class="fas fa-map-marker-alt"></i><span>Adres & İkamet</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="aile"><i class="fas fa-users"></i><span>Aile & Yakınlar</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="ehliyet"><i class="fas fa-car"></i><span>Ehliyet & Araç</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="banka"><i class="fas fa-money-bill-wave"></i><span>Banka Hesapları</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="vergi"><i class="fas fa-file-invoice-dollar"></i><span>Vergi Borçları</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="icra"><i class="fas fa-gavel"></i><span>İcra Dosyaları</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="kredi"><i class="fas fa-credit-card"></i><span>Kredi Notu</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="adli"><i class="fas fa-balance-scale"></i><span>Adli Sicil</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="sosyal"><i class="fas fa-globe"></i><span>Sosyal Medya</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="edevlet"><i class="fas fa-laptop-code"></i><span>e-Devlet Log</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="saglik"><i class="fas fa-heartbeat"></i><span>Sağlık Kayıtları</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="pasaport"><i class="fas fa-passport"></i><span>Pasaport & Vize</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="sgk"><i class="fas fa-briefcase"></i><span>SGK Döküm</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="okul"><i class="fas fa-graduation-cap"></i><span>Eğitim & Diploma</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="yabanci"><i class="fas fa-globe-asia"></i><span>Yabancı Uyruklu</span></a></li>
+      <li class="nav-item"><a class="nav-link" data-page="market"><i class="fas fa-shopping-cart"></i><span>Market</span></a></li>
+    </ul>
+  </div>
+
+  <!-- Ana İçerik -->
+  <div class="main-content">
+    <div class="header">
+      <h1>NOVA PANEL</h1>
+      <p>İsimden TC Bulma & Premium Sorgu Sistemi</p>
+    </div>
+
+    <div class="form-container" id="contentArea">
+      <!-- İçerik dinamik yüklenecek -->
+    </div>
+  </div>
+
+  <script>
+    const pages = {
+      home: `
+        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:2.8rem;">Hoş Geldin, Nova Elite</h2>
+        <p style="font-size:1.5rem; text-align:center; margin-bottom:3rem;">İsim ve soyisimden TC bulma gücü elinde!</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2.5rem;">
+          <div style="background:rgba(139,92,246,0.25); border:1px solid var(--primary); border-radius:20px; padding:2.5rem; text-align:center;">
+            <h3>İsimden TC Bul</h3>
+            <p>Ad + Soyad ile eşleşme</p>
+          </div>
+          <div style="background:rgba(139,92,246,0.25); border:1px solid var(--primary); border-radius:20px; padding:2.5rem; text-align:center;">
+            <h3>Ultra Hız</h3>
+            <p>Ortalama 5-12 saniye</p>
+          </div>
+          <div style="background:rgba(139,92,246,0.25); border:1px solid var(--primary); border-radius:20px; padding:2.5rem; text-align:center;">
+            <h3>30+ Kategori</h3>
+            <p>Tüm sorgular isim bazlı</p>
+          </div>
+          <div style="background:rgba(139,92,246,0.25); border:1px solid var(--primary); border-radius:20px; padding:2.5rem; text-align:center;">
+            <h3>7/24 Online</h3>
+            <p>Her zaman hazır</p>
+          </div>
+        </div>
+      `,
+
+      market: `
+        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem;">Premium Üyelik Paketleri</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2.5rem;">
+          <div style="background:rgba(17,24,39,0.85); border:2px solid rgba(139,92,246,0.5); border-radius:22px; padding:3rem; text-align:center;">
+            <h3>Haftalık</h3>
+            <div style="font-size:4rem; font-weight:bold; color:white;">₺ 299</div>
+            <div style="font-size:1.3rem; color:var(--text-muted);">/ hafta</div>
+            <ul style="list-style:none; margin:2.5rem 0; text-align:left; font-size:1.2rem;">
+              <li>✓ Sınırsız Sorgu</li>
+              <li>✓ İsimden TC Bulma</li>
+              <li>✓ Tüm Kategoriler</li>
+              <li>✓ Hızlı Sunucu</li>
+            </ul>
+            <button class="btn">Satın Al</button>
+          </div>
+
+          <div style="background:rgba(17,24,39,0.85); border:2px solid var(--primary); border-radius:22px; padding:3rem; text-align:center; transform:translateY(-25px);">
+            <h3>Aylık</h3>
+            <div style="font-size:4rem; font-weight:bold; color:white;">₺ 799</div>
+            <div style="font-size:1.3rem; color:var(--text-muted);">/ ay</div>
+            <ul style="list-style:none; margin:2.5rem 0; text-align:left; font-size:1.2rem;">
+              <li>✓ Sınırsız Sorgu</li>
+              <li>✓ İsimden TC Bulma</li>
+              <li>✓ Tüm Kategoriler</li>
+              <li>✓ Öncelikli Destek</li>
+            </ul>
+            <button class="btn">Satın Al</button>
+          </div>
+
+          <div style="background:rgba(17,24,39,0.85); border:2px solid rgba(139,92,246,0.5); border-radius:22px; padding:3rem; text-align:center;">
+            <h3>Yıllık</h3>
+            <div style="font-size:4rem; font-weight:bold; color:white;">₺ 5999</div>
+            <div style="font-size:1.3rem; color:var(--text-muted);">/ yıl (%50 İndirim)</div>
+            <ul style="list-style:none; margin:2.5rem 0; text-align:left; font-size:1.2rem;">
+              <li>✓ Sınırsız Sorgu</li>
+              <li>✓ İsimden TC Bulma</li>
+              <li>✓ Tüm Kategoriler</li>
+              <li>✓ VIP Destek</li>
+            </ul>
+            <button class="btn">Satın Al</button>
+          </div>
+        </div>
+      `
+    };
+
+    const queries = {
+      mernis: {
+        title: "Mernis / Nüfus Sorgulama (İsimden TC Bul)",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Örn: Ahmet", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Örn: Yılmaz", required: true },
+          { label: "Doğum Yılı (isteğe bağlı)", type: "text", id: "dogumyili", placeholder: "Örn: 1990" },
+          { label: "Anne Adı (isteğe bağlı)", type: "text", id: "anneadi", placeholder: "Anne adı" }
+        ]
+      },
+      adres: {
+        title: "Adres & İkamet Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "İl / İlce (isteğe bağlı)", type: "text", id: "il", placeholder: "Örn: İstanbul / Beşiktaş" }
+        ]
+      },
+      // ... (diğer sorgu türleri aynı şekilde, TC olmadan)
+      aile: {
+        title: "Aile & Yakınlar Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Anne Adı (isteğe bağlı)", type: "text", id: "anneadi", placeholder: "Anne adı" }
+        ]
+      },
+      ehliyet: {
+        title: "Ehliyet & Araç Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Plaka (isteğe bağlı)", type: "text", id: "plaka", placeholder: "34 ABC 123" }
+        ]
+      },
+      banka: {
+        title: "Banka Hesapları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      vergi: {
+        title: "Vergi Borçları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      icra: {
+        title: "İcra Dosyaları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      kredi: {
+        title: "Kredi Notu Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      adli: {
+        title: "Adli Sicil Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      sosyal: {
+        title: "Sosyal Medya Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Kullanıcı Adı Tahmini (isteğe bağlı)", type: "text", id: "kullaniciadi", placeholder: "Örn: ahmetyilmaz90" }
+        ]
+      },
+      edevlet: {
+        title: "e-Devlet Log Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      saglik: {
+        title: "Sağlık Kayıtları Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      pasaport: {
+        title: "Pasaport & Vize Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      sgk: {
+        title: "SGK Hizmet Dökümü Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
+        ]
+      },
+      okul: {
+        title: "Eğitim & Diploma Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Okul Adı (isteğe bağlı)", type: "text", id: "okul", placeholder: "Okul / Üniversite" }
+        ]
+      },
+      yabanci: {
+        title: "Yabancı Uyruklu Sorgulama",
+        fields: [
+          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
+          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
+          { label: "Uyruk (isteğe bağlı)", type: "text", id: "uyruk", placeholder: "Örn: Almanya" }
+        ]
+      }
+    };
+
+    const contentArea = document.getElementById('contentArea');
+    const links = document.querySelectorAll('.nav-link');
+    const loadingScreen = document.getElementById('globalLoading');
+
+    function loadPage(pageKey) {
+      links.forEach(l => l.classList.remove('active'));
+      document.querySelector(`[data-page="${pageKey}"]`)?.classList.add('active');
+
+      if (pages[pageKey]) {
+        contentArea.innerHTML = pages[pageKey];
+        return;
+      }
+
+      if (queries[pageKey]) {
+        const q = queries[pageKey];
+        let html = `
+          <h2 style="color:var(--primary); text-align:center; margin-bottom:2.5rem; font-size:2.8rem;">${q.title}</h2>
+          <form id="queryForm">
+        `;
+
+        q.fields.forEach(field => {
+          html += `
+            <div class="form-group">
+              <label for="${field.id}">${field.label}</label>
+              <input type="${field.type}" id="${field.id}" placeholder="${field.placeholder}" ${field.required ? 'required' : ''}>
+            </div>
+          `;
+        });
+
+        html += `
+            <button type="submit" class="btn">SORGULA</button>
+          </form>
+          <div class="result-box" id="result">Sorgu aktif değil. Premium paket satın almanız gerekiyor.</div>
+        `;
+
+        contentArea.innerHTML = html;
+
+        document.getElementById('queryForm').addEventListener('submit', e => {
+          e.preventDefault();
+
+          loadingScreen.style.display = 'flex';
+
+          setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            const result = document.getElementById('result');
+            result.style.display = 'block';
+            result.scrollIntoView({ behavior: 'smooth' });
+          }, 3000);
+        });
+      }
+    }
+
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const page = link.getAttribute('data-page');
+        loadPage(page);
+      });
+    });
+
+    // İlk yükleme
+    loadPage('home');
+  </script>
+</body>
+</html>
