@@ -1,746 +1,529 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nova Panel - Premium Sorgu Sistemi</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    :root {
-      --primary: #8b5cf6;
-      --primary-dark: #7c3aed;
-      --primary-glow: rgba(139, 92, 246, 0.8);
-      --bg-start: #0a001a;
-      --bg-end: #1a0a2a;
-      --bg-card: rgba(17,24,39,0.95);
-      --text: #e0e7ff;
-      --text-muted: #a5b4fc;
-      --sidebar-width: 280px;
-      --transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle fill="%23ffffff" opacity="0.12" cx="20" cy="30" r="1"/><circle fill="%23ffffff" opacity="0.15" cx="80" cy="60" r="1.5"/><circle fill="%23ffffff" opacity="0.1" cx="50" cy="90" r="1"/></svg>') repeat;
-      opacity: 0.5;
-      z-index: -2;
-      animation: stars 150s linear infinite;
-    }
-
-    @keyframes stars {
-      from { background-position: 0 0; }
-      to { background-position: 200px 200px; }
-    }
-
-    .auth-container {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(10,10,26,0.95);
-      z-index: 10000;
-      backdrop-filter: blur(10px);
-    }
-
-    .auth-box {
-      background: var(--bg-card);
-      border-radius: 20px;
-      padding: 3.5rem 3rem;
-      width: 100%;
-      max-width: 480px;
-      box-shadow: 0 0 100px rgba(139,92,246,0.6);
-      border: 1px solid rgba(139,92,246,0.5);
-      animation: authFadeIn 1s ease;
-    }
-
-    @keyframes authFadeIn {
-      from { opacity: 0; transform: translateY(40px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    .auth-header h1 {
-      font-size: 3.2rem;
-      color: var(--primary);
-      text-shadow: 0 0 40px var(--primary-glow);
-      margin-bottom: 0.5rem;
-      animation: glow 3s infinite alternate;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 20px var(--primary-glow); }
-      to { text-shadow: 0 0 60px var(--primary-glow); }
-    }
-
-    .form-group {
-      margin-bottom: 2rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      font-size: 1.1rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 1.4rem;
-      background: rgba(139,92,246,0.1);
-      border: 1px solid rgba(139,92,246,0.5);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 1.2rem;
-      transition: all 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 25px rgba(139,92,246,0.5);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 1.4rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.4s;
-      box-shadow: 0 0 40px rgba(139,92,246,0.5);
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-5px);
-      box-shadow: 0 20px 60px rgba(139,92,246,0.7);
-    }
-
-    .checkbox-group {
-      margin: 1.5rem 0;
-      display: flex;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 1rem;
-    }
-
-    .checkbox-group input {
-      width: 18px;
-      height: 18px;
-      margin-right: 10px;
-      accent-color: var(--primary);
-    }
-
-    .loading-screen {
-      position: fixed;
-      inset: 0;
-      background: rgba(10,10,26,0.98);
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      color: var(--primary);
-    }
-
-    .spinner {
-      width: 90px;
-      height: 90px;
-      border: 10px solid rgba(139,92,246,0.2);
-      border-top: 10px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1.2s linear infinite;
-      margin-bottom: 30px;
-      box-shadow: 0 0 60px var(--primary-glow);
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      font-size: 1.8rem;
-      text-shadow: 0 0 20px var(--primary-glow);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-
-    /* Sidebar */
-    .sidebar {
-      position: fixed;
-      left: 0; top: 0; bottom: 0;
-      width: var(--sidebar-width);
-      background: linear-gradient(180deg, rgba(17,24,39,0.95) 0%, rgba(15,23,42,0.95) 100%);
-      backdrop-filter: blur(12px);
-      border-right: 1px solid rgba(139,92,246,0.5);
-      padding: 1.5rem 1rem;
-      overflow-y: auto;
-      z-index: 1000;
-      box-shadow: 4px 0 50px rgba(139,92,246,0.4);
-      transition: var(--transition);
-      display: none;
-    }
-
-    .logo {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: var(--primary);
-      text-shadow: 0 0 40px var(--primary-glow);
-      text-align: center;
-      animation: neonPulse 3.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes neonPulse {
-      from { text-shadow: 0 0 20px var(--primary-glow); }
-      to { text-shadow: 0 0 60px var(--primary-glow); }
-    }
-
-    .nav-list { list-style: none; }
-    .nav-item { margin: 0.6rem 0; }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      padding: 1.2rem 1.4rem;
-      color: var(--text-muted);
-      text-decoration: none;
-      border-radius: 14px;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      background: rgba(139,92,246,0.3);
-      color: white;
-      transform: translateX(15px) scale(1.05);
-      box-shadow: 0 0 40px rgba(139,92,246,0.6);
-    }
-
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
-      transition: left 0.8s;
-    }
-
-    .nav-link:hover::before { left: 100%; }
-
-    .nav-link i { margin-right: 14px; width: 24px; text-align: center; }
-
-    /* Ana İçerik */
-    .main-content {
-      margin-left: var(--sidebar-width);
-      padding: 3rem 4rem;
-      transition: var(--transition);
-      display: none;
-    }
-
-    .header {
-      margin-bottom: 2.5rem;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 3.5rem;
-      color: var(--primary);
-      text-shadow: 0 0 60px var(--primary-glow);
-      animation: headerGlow 4s infinite alternate;
-    }
-
-    @keyframes headerGlow {
-      from { text-shadow: 0 0 40px var(--primary-glow); }
-      to { text-shadow: 0 0 100px var(--primary-glow); }
-    }
-
-    .form-container {
-      background: var(--bg-card);
-      border-radius: 24px;
-      border: 1px solid rgba(139,92,246,0.5);
-      padding: 3rem;
-      box-shadow: 0 30px 80px rgba(139,92,246,0.3);
-      max-width: 850px;
-      margin: 0 auto;
-      animation: fadeInScale 1.2s ease-out;
-      position: relative;
-    }
-
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .form-group { margin-bottom: 2rem; }
-    label { display: block; margin-bottom: 0.8rem; font-weight: 500; color: var(--text-muted); font-size: 1.1rem; }
-    input[type="text"], input[type="tel"], textarea {
-      width: 100%;
-      padding: 1.2rem;
-      background: rgba(139,92,246,0.08);
-      border: 1px solid rgba(139,92,246,0.5);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 1.1rem;
-      transition: var(--transition);
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 30px rgba(139,92,246,0.6);
-      transform: scale(1.02);
-    }
-
-    .btn {
-      padding: 1.3rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: var(--transition);
-      width: 100%;
-      box-shadow: 0 0 30px rgba(139,92,246,0.4);
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 20px 60px rgba(139,92,246,0.7);
-    }
-
-    .result-box {
-      margin-top: 2.5rem;
-      padding: 2rem;
-      background: rgba(139,92,246,0.2);
-      border: 1px solid var(--primary);
-      border-radius: 14px;
-      white-space: pre-wrap;
-      font-family: monospace;
-      color: #e0e7ff;
-      display: none;
-      animation: resultFadeIn 0.8s ease;
-      text-align: center;
-      font-size: 1.2rem;
-      box-shadow: 0 0 40px rgba(139,92,246,0.5);
-    }
-
-    @keyframes resultFadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Mobil Uyum */
-    @media (max-width: 768px) {
-      .sidebar { width: 70px; }
-      .sidebar:hover { width: 260px; }
-      .nav-link span { opacity: 0; }
-      .sidebar:hover .nav-link span { opacity: 1; }
-      .main-content { margin-left: 70px; padding: 1.5rem; }
-      .sidebar:hover + .main-content { margin-left: 260px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>🎮 Super Online Oyun Portalı</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background: #222;
+            padding: 10px;
+            text-align: center;
+        }
+        nav button {
+            margin: 4px;
+            padding: 10px 18px;
+            border: none;
+            background: #444;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        nav button:hover {
+            background: #666;
+        }
+        #gameContainer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        canvas {
+            border: 2px solid #444;
+            background: #000;
+        }
+        #info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 13px;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
-  <!-- Key Giriş Ekranı -->
-  <div class="auth-container" id="authContainer">
-    <div class="auth-box">
-      <div class="auth-header">
-        <h1>Nova Panel</h1>
-        <p>Lütfen erişim anahtarını gir</p>
-      </div>
+    <header>
+        <h1>🎮 Super Online Oyun Portalı</h1>
+        <nav id="menu">
+            <button onclick="loadGame('space')">Uzay Shooter</button>
+            <button onclick="loadGame('car')">Araba Yarışı</button>
+            <button onclick="loadGame('pong')">Pong</button>
+            <button onclick="loadGame('snake')">Yılan</button>
+            <button onclick="loadGame('breakout')">Breakout</button>
+            <button onclick="loadGame('dodge')">Top Kaçışı</button>
+        </nav>
+    </header>
 
-      <form id="authForm">
-        <div class="form-group">
-          <label for="key">Erişim Anahtarı</label>
-          <input type="text" id="key" placeholder="Anahtarı buraya yazın" required>
-        </div>
-
-        <div class="checkbox-group">
-          <input type="checkbox" id="remember">
-          <label for="remember">Beni hatırla (30 gün)</label>
-        </div>
-
-        <button type="submit" class="btn">Giriş Yap</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Loading Ekranı -->
-  <div class="loading-screen" id="globalLoading">
-    <div class="spinner"></div>
-    <div class="loading-text">Nova Gücü Aktif... Doğrulanıyor</div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">NOVA</div>
-      <p style="font-size:0.9rem; color:var(--text-muted); text-align:center; margin-top:0.8rem;">İsimden TC Bulma Sistemi</p>
+    <div id="gameContainer">
+        <canvas id="canvas" width="800" height="500"></canvas>
     </div>
 
-    <ul class="nav-list">
-      <li class="nav-item"><a class="nav-link active" data-page="home"><i class="fas fa-home"></i><span>Ana Sayfa</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="mernis"><i class="fas fa-id-card"></i><span>Mernis / Nüfus</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="adres"><i class="fas fa-map-marker-alt"></i><span>Adres & İkamet</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="aile"><i class="fas fa-users"></i><span>Aile & Yakınlar</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="ehliyet"><i class="fas fa-car"></i><span>Ehliyet & Araç</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="banka"><i class="fas fa-money-bill-wave"></i><span>Banka Hesapları</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="vergi"><i class="fas fa-file-invoice-dollar"></i><span>Vergi Borçları</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="icra"><i class="fas fa-gavel"></i><span>İcra Dosyaları</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="kredi"><i class="fas fa-credit-card"></i><span>Kredi Notu</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="adli"><i class="fas fa-balance-scale"></i><span>Adli Sicil</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="sosyal"><i class="fas fa-globe"></i><span>Sosyal Medya</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="edevlet"><i class="fas fa-laptop-code"></i><span>e-Devlet Log</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="saglik"><i class="fas fa-heartbeat"></i><span>Sağlık Kayıtları</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="pasaport"><i class="fas fa-passport"></i><span>Pasaport & Vize</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="sgk"><i class="fas fa-briefcase"></i><span>SGK Döküm</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="okul"><i class="fas fa-graduation-cap"></i><span>Eğitim & Diploma</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="yabanci"><i class="fas fa-globe-asia"></i><span>Yabancı Uyruklu</span></a></li>
-      <li class="nav-item"><a class="nav-link" data-page="market"><i class="fas fa-shopping-cart"></i><span>Market</span></a></li>
-    </ul>
-  </div>
+    <div id="info">Yön tuşları / Fare / Klavye ile kontroller sağlanır.</div>
 
-  <!-- Ana İçerik -->
-  <div class="main-content" id="mainContent">
-    <div class="header">
-      <h1>NOVA PANEL</h1>
-      <p>İsimden TC Bulma & Premium Sorgu Sistemi</p>
-    </div>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let currentGame = null;
+        let gameLoop = null;
 
-    <div class="form-container" id="contentArea">
-      <!-- İçerik buraya dinamik yüklenecek -->
-    </div>
-  </div>
+        function clearLoop() {
+            if (gameLoop) {
+                cancelAnimationFrame(gameLoop);
+                gameLoop = null;
+            }
+        }
 
-  <script>
-    // Sayfa yüklenince key giriş ekranı göster
-    const authContainer = document.getElementById('authContainer');
-    const mainContent = document.getElementById('mainContent');
-    const sidebar = document.querySelector('.sidebar');
-    const loadingScreen = document.getElementById('globalLoading');
+        /* ---------- UZAY SHOOTER ---------- */
+        function startSpaceShooter() {
+            clearLoop();
+            const player = { x: 380, y: 450, w: 40, h: 30, speed: 6 };
+            const bullets = [];
+            const enemies = [];
+            const enemySpeed = 2;
+            let left = false, right = false, space = false;
+            let score = 0;
 
-    // Beni hatırla kontrolü (localStorage)
-    if (localStorage.getItem('novaKey') === 'novabest') {
-      authContainer.style.display = 'none';
-      mainContent.style.display = 'block';
-      sidebar.style.display = 'block';
-      document.body.classList.add('logged-in');
-      loadPage('home');
-    }
+            function draw() {
+                ctx.fillStyle = "#000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Player
+                ctx.fillStyle = "#0ff";
+                ctx.fillRect(player.x, player.y, player.w, player.h);
+                // Bullets
+                ctx.fillStyle = "#ff0";
+                bullets.forEach(b => ctx.fillRect(b.x, b.y, 4, 10));
+                // Enemies
+                ctx.fillStyle = "#f00";
+                enemies.forEach(e => ctx.fillRect(e.x, e.y, 30, 30));
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "20px sans-serif";
+                ctx.fillText("Skor: " + score, 10, 25);
+            }
 
-    const authForm = document.getElementById('authForm');
-    const rememberCheckbox = document.getElementById('remember');
+            function update() {
+                if (left && player.x > 0) player.x -= player.speed;
+                if (right && player.x < canvas.width - player.w) player.x += player.speed;
+                // Bullets move
+                for (let i = bullets.length - 1; i >= 0; i--) {
+                    bullets[i].y -= 8;
+                    if (bullets[i].y < 0) bullets.splice(i, 1);
+                }
+                // Enemies move
+                for (let i = enemies.length - 1; i >= 0; i--) {
+                    enemies[i].y += enemySpeed;
+                    if (enemies[i].y > canvas.height) enemies.splice(i, 1);
+                }
+                // Spawn enemy
+                if (Math.random() < 0.02) enemies.push({ x: Math.random() * (canvas.width - 30), y: -30 });
+                // Collisions
+                for (let i = bullets.length - 1; i >= 0; i--) {
+                    for (let j = enemies.length - 1; j >= 0; j--) {
+                        const b = bullets[i], e = enemies[j];
+                        if (b.x < e.x + 30 && b.x + 4 > e.x && b.y < e.y + 30 && b.y + 10 > e.y) {
+                            bullets.splice(i, 1);
+                            enemies.splice(j, 1);
+                            score++;
+                            break;
+                        }
+                    }
+                }
+                // Game over check
+                for (let e of enemies) {
+                    if (e.y + 30 >= player.y && e.x < player.x + player.w && e.x + 30 > player.x) {
+                        alert("Oyun Bitti! Skor: " + score);
+                        clearLoop();
+                        return;
+                    }
+                }
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-    authForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const key = document.getElementById('key').value.trim().toLowerCase();
+            window.onkeydown = e => {
+                if (e.code === "ArrowLeft") left = true;
+                if (e.code === "ArrowRight") right = true;
+                if (e.code === "Space") {
+                    if (!space) {
+                        bullets.push({ x: player.x + player.w / 2 - 2, y: player.y });
+                        space = true;
+                    }
+                }
+            };
+            window.onkeyup = e => {
+                if (e.code === "ArrowLeft") left = false;
+                if (e.code === "ArrowRight") right = false;
+                if (e.code === "Space") space = false;
+            };
+            update();
+        }
 
-      if (key === 'novabest') {
-        loadingScreen.style.display = 'flex';
+        /* ---------- ARABA YARIŞI ---------- */
+        function startCarRace() {
+            clearLoop();
+            const road = { x: 0, y: 0, w: 300, h: canvas.height };
+            const car = { x: road.x + road.w / 2 - 15, y: canvas.height - 100, w: 30, h: 50 };
+            const traffic = [];
+            let score = 0;
+            let keys = {};
 
-        setTimeout(() => {
-          loadingScreen.style.display = 'none';
+            function draw() {
+                ctx.fillStyle = "#222";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Road
+                ctx.fillStyle = "#444";
+                ctx.fillRect(road.x, road.y, road.w, road.h);
+                // Lines
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 4;
+                ctx.setLineDash([20, 20]);
+                ctx.beginPath();
+                ctx.moveTo(road.x + road.w / 2, 0);
+                ctx.lineTo(road.x + road.w / 2, canvas.height);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                // Car
+                ctx.fillStyle = "#00f";
+                ctx.fillRect(car.x, car.y, car.w, car.h);
+                // Traffic
+                ctx.fillStyle = "#f00";
+                traffic.forEach(t => ctx.fillRect(t.x, t.y, t.w, t.h));
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "18px sans-serif";
+                ctx.fillText("Skor: " + score, 10, 25);
+            }
 
-          if (rememberCheckbox.checked) {
-            localStorage.setItem('novaKey', 'novabest');
-          } else {
-            localStorage.removeItem('novaKey');
-          }
+            function update() {
+                // Controls
+                if (keys["ArrowLeft"] && car.x > road.x) car.x -= 5;
+                if (keys["ArrowRight"] && car.x < road.x + road.w - car.w) car.x += 5;
+                // Move traffic
+                for (let i = traffic.length - 1; i >= 0; i--) {
+                    traffic[i].y += 4;
+                    if (traffic[i].y > canvas.height) {
+                        traffic.splice(i, 1);
+                        score++;
+                    }
+                }
+                // Spawn
+                if (Math.random() < 0.02) {
+                    const lanes = [road.x + 20, road.x + road.w - 50];
+                    traffic.push({ x: lanes[Math.floor(Math.random() * lanes.length)], y: -50, w: 30, h: 50 });
+                }
+                // Collision
+                for (let t of traffic) {
+                    if (!(car.x > t.x + t.w || car.x + car.w < t.x || car.y > t.y + t.h || car.y + car.h < t.y)) {
+                        alert("Çarpışma! Skor: " + score);
+                        clearLoop();
+                        return;
+                    }
+                }
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-          authContainer.style.display = 'none';
-          mainContent.style.display = 'block';
-          sidebar.style.display = 'block';
-          document.body.classList.add('logged-in');
+            window.onkeydown = e => keys[e.code] = true;
+            window.onkeyup = e => keys[e.code] = false;
+            update();
+        }
 
-          loadPage('home');
-        }, 3000);
-      } else {
-        alert('Geçersiz anahtar! Doğru anahtar: novabest');
-      }
-    });
+        /* ---------- PONG ---------- */
+        function startPong() {
+            clearLoop();
+            const paddle = (x, y) => ({ x, y, w: 100, h: 12, score: 0 });
+            const pad1 = paddle(canvas.width / 2 - 50, 20);
+            const pad2 = paddle(canvas.width / 2 - 50, canvas.height - 32);
+            const ball = { x: canvas.width / 2, y: canvas.height / 2, r: 8, dx: 4, dy: 4 };
+            let keys = {};
 
-    // Sayfa içerikleri (Ana sayfa tam istediğin gibi)
-    const pages = {
-      home: `
-        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem; font-size:3rem;">Hoş Geldin, Nova Elite</h2>
-        <p style="font-size:1.4rem; text-align:center; margin-bottom:3rem;">İsim ve soyisimden TC bulma gücü elinde!</p>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
-            <h3>İsimden TC Bul</h3>
-            <p>Ad + Soyad ile eşleşme</p>
-          </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
-            <h3>Ultra Hız</h3>
-            <p>Ortalama 5-12 saniye</p>
-          </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
-            <h3>30+ Kategori</h3>
-            <p>Tüm sorgular isim bazlı</p>
-          </div>
-          <div style="background:rgba(139,92,246,0.2); border:1px solid var(--primary); border-radius:16px; padding:2.5rem; text-align:center;">
-            <h3>7/24 Online</h3>
-            <p>Her zaman hazır</p>
-          </div>
-        </div>
-      `,
+            function draw() {
+                ctx.fillStyle = "#000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Paddles
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(pad1.x, pad1.y, pad1.w, pad1.h);
+                ctx.fillRect(pad2.x, pad2.y, pad2.w, pad2.h);
+                // Ball
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                ctx.fill();
+                // Scores
+                ctx.font = "24px sans-serif";
+                ctx.fillText(pad1.score, 30, 30);
+                ctx.fillText(pad2.score, canvas.width - 40, canvas.height - 10);
+            }
 
-      market: `
-        <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem;">Premium Üyelik Paketleri</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;">
-          <div style="background:rgba(17,24,39,0.8); border:2px solid rgba(139,92,246,0.4); border-radius:18px; padding:2.5rem; text-align:center;">
-            <h3>Haftalık</h3>
-            <div style="font-size:3.5rem; font-weight:bold; color:white;">₺ 299</div>
-            <div style="font-size:1.2rem; color:var(--text-muted);">/ hafta</div>
-            <ul style="list-style:none; margin:2rem 0; text-align:left; font-size:1.1rem;">
-              <li>✓ Sınırsız Sorgu</li>
-              <li>✓ İsimden TC Bulma</li>
-              <li>✓ Tüm Kategoriler</li>
-              <li>✓ Hızlı Sunucu</li>
-            </ul>
-            <button class="btn">Satın Al</button>
-          </div>
+            function update() {
+                // Paddle controls
+                if (keys["a"] && pad1.x > 0) pad1.x -= 6;
+                if (keys["d"] && pad1.x < canvas.width - pad1.w) pad1.x += 6;
+                if (keys["ArrowLeft"] && pad2.x > 0) pad2.x -= 6;
+                if (keys["ArrowRight"] && pad2.x < canvas.width - pad2.w) pad2.x += 6;
+                // Ball move
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+                // Walls
+                if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) ball.dx *= -1;
+                // Paddles
+                if (ball.y - ball.r < pad1.y + pad1.h && ball.x > pad1.x && ball.x < pad1.x + pad1.w) ball.dy = Math.abs(ball.dy);
+                if (ball.y + ball.r > pad2.y && ball.x > pad2.x && ball.x < pad2.x + pad2.w) ball.dy = -Math.abs(ball.dy);
+                // Score
+                if (ball.y < 0) { pad2.score++; resetBall(); }
+                if (ball.y > canvas.height) { pad1.score++; resetBall(); }
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-          <div style="background:rgba(17,24,39,0.8); border:2px solid var(--primary); border-radius:18px; padding:2.5rem; text-align:center; transform:translateY(-20px);">
-            <h3>Aylık</h3>
-            <div style="font-size:3.5rem; font-weight:bold; color:white;">₺ 799</div>
-            <div style="font-size:1.2rem; color:var(--text-muted);">/ ay</div>
-            <ul style="list-style:none; margin:2rem 0; text-align:left; font-size:1.1rem;">
-              <li>✓ Sınırsız Sorgu</li>
-              <li>✓ İsimden TC Bulma</li>
-              <li>✓ Tüm Kategoriler</li>
-              <li>✓ Öncelikli Destek</li>
-            </ul>
-            <button class="btn">Satın Al</button>
-          </div>
+            function resetBall() {
+                ball.x = canvas.width / 2;
+                ball.y = canvas.height / 2;
+                ball.dx = (Math.random() > 0.5 ? 1 : -1) * 4;
+                ball.dy = (Math.random() > 0.5 ? 1 : -1) * 4;
+            }
 
-          <div style="background:rgba(17,24,39,0.8); border:2px solid rgba(139,92,246,0.4); border-radius:18px; padding:2.5rem; text-align:center;">
-            <h3>Yıllık</h3>
-            <div style="font-size:3.5rem; font-weight:bold; color:white;">₺ 5999</div>
-            <div style="font-size:1.2rem; color:var(--text-muted);">/ yıl (%50 İndirim)</div>
-            <ul style="list-style:none; margin:2rem 0; text-align:left; font-size:1.1rem;">
-              <li>✓ Sınırsız Sorgu</li>
-              <li>✓ İsimden TC Bulma</li>
-              <li>✓ Tüm Kategoriler</li>
-              <li>✓ VIP Destek</li>
-            </ul>
-            <button class="btn">Satın Al</button>
-          </div>
-        </div>
-      `
-    };
+            window.onkeydown = e => keys[e.code] = true;
+            window.onkeyup = e => keys[e.code] = false;
+            update();
+        }
 
-    const queries = {
-      mernis: {
-        title: "Mernis / Nüfus Sorgulama (İsimden TC Bul)",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Örn: Ahmet", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Örn: Yılmaz", required: true },
-          { label: "Doğum Yılı (isteğe bağlı)", type: "text", id: "dogumyili", placeholder: "Örn: 1990" },
-          { label: "Anne Adı (isteğe bağlı)", type: "text", id: "anneadi", placeholder: "Anne adı" }
-        ]
-      },
-      adres: {
-        title: "Adres & İkamet Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "İl / İlce (isteğe bağlı)", type: "text", id: "il", placeholder: "Örn: İstanbul / Beşiktaş" }
-        ]
-      },
-      aile: {
-        title: "Aile & Yakınlar Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "Anne Adı (isteğe bağlı)", type: "text", id: "anneadi", placeholder: "Anne adı" }
-        ]
-      },
-      ehliyet: {
-        title: "Ehliyet & Araç Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "Plaka (isteğe bağlı)", type: "text", id: "plaka", placeholder: "34 ABC 123" }
-        ]
-      },
-      banka: {
-        title: "Banka Hesapları Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      vergi: {
-        title: "Vergi Borçları Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      icra: {
-        title: "İcra Dosyaları Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      kredi: {
-        title: "Kredi Notu Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      adli: {
-        title: "Adli Sicil Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      sosyal: {
-        title: "Sosyal Medya Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "Kullanıcı Adı Tahmini (isteğe bağlı)", type: "text", id: "kullaniciadi", placeholder: "Örn: ahmetyilmaz90" }
-        ]
-      },
-      edevlet: {
-        title: "e-Devlet Log Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      saglik: {
-        title: "Sağlık Kayıtları Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      pasaport: {
-        title: "Pasaport & Vize Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      sgk: {
-        title: "SGK Hizmet Dökümü Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true }
-        ]
-      },
-      okul: {
-        title: "Eğitim & Diploma Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "Okul Adı (isteğe bağlı)", type: "text", id: "okul", placeholder: "Okul / Üniversite" }
-        ]
-      },
-      yabanci: {
-        title: "Yabancı Uyruklu Sorgulama",
-        fields: [
-          { label: "Ad", type: "text", id: "ad", placeholder: "Ad", required: true },
-          { label: "Soyad", type: "text", id: "soyad", placeholder: "Soyad", required: true },
-          { label: "Uyruk (isteğe bağlı)", type: "text", id: "uyruk", placeholder: "Örn: Almanya" }
-        ]
-      }
-    };
+        /* ---------- YILAN ---------- */
+        function startSnake() {
+            clearLoop();
+            const grid = 20;
+            let snake = [{ x: 10, y: 10 }];
+            let dx = 0, dy = 0;
+            let food = { x: 15, y: 15 };
+            let score = 0;
 
-    const contentArea = document.getElementById('contentArea');
-    const links = document.querySelectorAll('.nav-link');
+            function draw() {
+                ctx.fillStyle = "#111";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Snake
+                ctx.fillStyle = "#0f0";
+                snake.forEach(s => ctx.fillRect(s.x * grid, s.y * grid, grid, grid));
+                // Food
+                ctx.fillStyle = "#f00";
+                ctx.fillRect(food.x * grid, food.y * grid, grid, grid);
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "20px sans-serif";
+                ctx.fillText("Skor: " + score, 10, 25);
+            }
 
-    function loadPage(pageKey) {
-      links.forEach(l => l.classList.remove('active'));
-      document.querySelector(`[data-page="${pageKey}"]`)?.classList.add('active');
+            function update() {
+                if (dx === 0 && dy === 0) {
+                    draw();
+                    gameLoop = requestAnimationFrame(update);
+                    return;
+                }
+                const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+                // Walls
+                if (head.x < 0 || head.x >= canvas.width / grid || head.y < 0 || head.y >= canvas.height / grid) {
+                    alert("Duvara çarptın! Skor: " + score);
+                    clearLoop();
+                    return;
+                }
+                // Self
+                for (let s of snake) {
+                    if (head.x === s.x && head.y === s.y) {
+                        alert("Kendine çarptın! Skor: " + score);
+                        clearLoop();
+                        return;
+                    }
+                }
+                snake.unshift(head);
+                // Food
+                if (head.x === food.x && head.y === food.y) {
+                    score++;
+                    food = { x: Math.floor(Math.random() * (canvas.width / grid)), y: Math.floor(Math.random() * (canvas.height / grid)) };
+                } else {
+                    snake.pop();
+                }
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-      if (pages[pageKey]) {
-        contentArea.innerHTML = pages[pageKey];
-        return;
-      }
+            window.onkeydown = e => {
+                if (e.code === "ArrowUp" && dy === 0) { dx = 0; dy = -1; }
+                if (e.code === "ArrowDown" && dy === 0) { dx = 0; dy = 1; }
+                if (e.code === "ArrowLeft" && dx === 0) { dx = -1; dy = 0; }
+                if (e.code === "ArrowRight" && dx === 0) { dx = 1; dy = 0; }
+            };
+            update();
+        }
 
-      if (queries[pageKey]) {
-        const q = queries[pageKey];
-        let html = `
-          <h2 style="color:var(--primary); text-align:center; margin-bottom:2.5rem; font-size:2.5rem;">${q.title}</h2>
-          <form id="queryForm">
-        `;
+        /* ---------- BREAKOUT ---------- */
+        function startBreakout() {
+            clearLoop();
+            const paddle = { x: canvas.width / 2 - 50, y: canvas.height - 30, w: 100, h: 12 };
+            const ball = { x: canvas.width / 2, y: canvas.height / 2, r: 8, dx: 4, dy: -4 };
+            const bricks = [];
+            const brickRows = 5, brickCols = 10, brickW = 70, brickH = 20, brickPad = 5, offsetTop = 30, offsetLeft = 35;
+            for (let r = 0; r < brickRows; r++) {
+                for (let c = 0; c < brickCols; c++) {
+                    bricks.push({ x: offsetLeft + c * (brickW + brickPad), y: offsetTop + r * (brickH + brickPad), w: brickW, h: brickH, alive: true });
+                }
+            }
+            let score = 0;
+            let keys = {};
 
-        q.fields.forEach(field => {
-          html += `
-            <div class="form-group">
-              <label for="${field.id}">${field.label}</label>
-              <input type="${field.type}" id="${field.id}" placeholder="${field.placeholder}" ${field.required ? 'required' : ''}>
-            </div>
-          `;
-        });
+            function draw() {
+                ctx.fillStyle = "#000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Paddle
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+                // Ball
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                ctx.fill();
+                // Bricks
+                ctx.fillStyle = "#f80";
+                bricks.forEach(b => { if (b.alive) ctx.fillRect(b.x, b.y, b.w, b.h); });
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "18px sans-serif";
+                ctx.fillText("Skor: " + score, 10, 20);
+            }
 
-        html += `
-            <button type="submit" class="btn">SORGULA</button>
-          </form>
-          <div class="result-box" id="result">Sorgu aktif değil. Premium paket satın almanız gerekiyor.</div>
-        `;
+            function update() {
+                // Paddle
+                if (keys["ArrowLeft"] && paddle.x > 0) paddle.x -= 6;
+                if (keys["ArrowRight"] && paddle.x < canvas.width - paddle.w) paddle.x += 6;
+                // Ball
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+                if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) ball.dx *= -1;
+                if (ball.y - ball.r < 0) ball.dy *= -1;
+                if (ball.y + ball.r > canvas.height) {
+                    alert("Top düştü! Skor: " + score);
+                    clearLoop();
+                    return;
+                }
+                // Paddle hit
+                if (ball.y + ball.r > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.w) ball.dy = -Math.abs(ball.dy);
+                // Bricks
+                for (let b of bricks) {
+                    if (b.alive && ball.x > b.x && ball.x < b.x + b.w && ball.y > b.y && ball.y < b.y + b.h) {
+                        b.alive = false;
+                        ball.dy *= -1;
+                        score++;
+                    }
+                }
+                // Win
+                if (bricks.every(b => !b.alive)) {
+                    alert("Tebrikler! Tüm tuğları kırdın. Skor: " + score);
+                    clearLoop();
+                    return;
+                }
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-        contentArea.innerHTML = html;
+            window.onkeydown = e => keys[e.code] = true;
+            window.onkeyup = e => keys[e.code] = false;
+            update();
+        }
 
-        document.getElementById('queryForm').addEventListener('submit', e => {
-          e.preventDefault();
+        /* ---------- TOP KAÇIŞI ---------- */
+        function startDodge() {
+            clearLoop();
+            const player = { x: canvas.width / 2, y: canvas.height / 2, r: 10 };
+            const balls = [];
+            let score = 0;
+            let mouse = { x: player.x, y: player.y };
 
-          loadingScreen.style.display = 'flex';
+            function draw() {
+                ctx.fillStyle = "#000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Player
+                ctx.fillStyle = "#0f0";
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2);
+                ctx.fill();
+                // Enemy balls
+                ctx.fillStyle = "#f00";
+                balls.forEach(b => {
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                // Score
+                ctx.fillStyle = "#fff";
+                ctx.font = "20px sans-serif";
+                ctx.fillText("Skor: " + score, 10, 25);
+            }
 
-          setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-          }, 3000);
-        });
-      }
-    }
+            function update() {
+                // Player follow mouse
+                const dx = mouse.x - player.x, dy = mouse.y - player.y, dist = Math.hypot(dx, dy);
+                if (dist > 1) {
+                    player.x += (dx / dist) * 5;
+                    player.y += (dy / dist) * 5;
+                }
+                // Enemy balls
+                for (let i = balls.length - 1; i >= 0; i--) {
+                    const b = balls[i];
+                    b.x += b.dx;
+                    b.y += b.dy;
+                    if (b.x - b.r < 0 || b.x + b.r > canvas.width) b.dx *= -1;
+                    if (b.y - b.r < 0 || b.y + b.r > canvas.height) b.dy *= -1;
+                    // Collision
+                    if (Math.hypot(b.x - player.x, b.y - player.y) < b.r + player.r) {
+                        alert("Çarptın! Skor: " + score);
+                        clearLoop();
+                        return;
+                    }
+                }
+                // Spawn
+                if (Math.random() < 0.02) {
+                    const r = 8 + Math.random() * 8;
+                    const side = Math.floor(Math.random() * 4);
+                    let x, y, dx, dy;
+                    if (side === 0) { x = -r; y = Math.random() * canvas.height; dx = 2 + Math.random() * 2; dy = (Math.random() - 0.5) * 2; }
+                    if (side === 1) { x = canvas.width + r; y = Math.random() * canvas.height; dx = -(2 + Math.random() * 2); dy = (Math.random() - 0.5) * 2; }
+                    if (side === 2) { x = Math.random() * canvas.width; y = -r; dx = (Math.random() - 0.5) * 2; dy = 2 + Math.random() * 2; }
+                    if (side === 3) { x = Math.random() * canvas.width; y = canvas.height + r; dx = (Math.random() - 0.5) * 2; dy = -(2 + Math.random() * 2); }
+                    balls.push({ x, y, r, dx, dy });
+                }
+                score++;
+                draw();
+                gameLoop = requestAnimationFrame(update);
+            }
 
-    links.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const page = link.getAttribute('data-page');
-        loadPage(page);
-      });
-    });
-  </script>
+            canvas.onmousemove = e => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            };
+            update();
+        }
+
+        /* ---------- OYUN YÜKLEYİCİ ---------- */
+        function loadGame(name) {
+            clearLoop();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (name === "space") startSpaceShooter();
+            if (name === "car") startCarRace();
+            if (name === "pong") startPong();
+            if (name === "snake") startSnake();
+            if (name === "breakout") startBreakout();
+            if (name === "dodge") startDodge();
+        }
+
+        // Başlangıçta ilk oyun
+        loadGame("space");
+    </script>
 </body>
 </html>
