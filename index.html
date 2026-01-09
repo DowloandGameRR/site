@@ -2,528 +2,202 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>🎮 Super Online Oyun Portalı</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Online</title>
     <style>
         body {
             margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: #111;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #0a0a15;
+            color: #d0d0ff;
+            scroll-behavior: smooth; /* Bu satır sayesinde linkler yumuşak kaydırır */
         }
         header {
-            background: #222;
-            padding: 10px;
+            position: fixed;
+            width: 100%;
+            background: rgba(10, 10, 21, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(107, 27, 154, 0.4);
+            z-index: 1000;
+        }
+        .logo img {
+            max-height: 70px;
+            transition: transform 0.4s;
+        }
+        .logo img:hover {
+            transform: scale(1.15);
+        }
+        nav a {
+            color: #bb86fc;
+            text-decoration: none;
+            margin: 0 25px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #ffffff;
+        }
+        section {
+            padding: 140px 20px 80px; /* Üst padding header'ı hesaba katıyor */
             text-align: center;
         }
-        nav button {
-            margin: 4px;
-            padding: 10px 18px;
-            border: none;
-            background: #444;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        nav button:hover {
-            background: #666;
-        }
-        #gameContainer {
-            flex: 1;
+        #home {
+            background: linear-gradient(rgba(10,10,21,0.75), rgba(10,10,21,0.85)), url('https://static.vecteezy.com/system/resources/thumbnails/006/970/888/small/digital-cyberspace-futuristic-purple-color-particles-wave-flowing-with-lines-and-dots-connection-technology-network-abstract-background-3d-rendering-free-photo.jpg') center/cover no-repeat fixed;
+            min-height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            background: #000;
         }
-        canvas {
-            border: 2px solid #444;
-            background: #000;
+        .hero h1 {
+            font-size: 60px;
+            color: #bb86fc;
+            text-shadow: 0 0 20px #6a1b9a;
         }
-        #info {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 13px;
-            color: #aaa;
+        .hero p {
+            font-size: 24px;
+            max-width: 800px;
+            margin: 20px auto 40px;
+        }
+        .btn {
+            background: #6a1b9a;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 0 15px rgba(107, 27, 154, 0.5);
+        }
+        .btn:hover {
+            background: #bb86fc;
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(187, 134, 252, 0.7);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+        .service-card {
+            background: #161625;
+            padding: 40px;
+            border-radius: 20px;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(107, 27, 154, 0.4);
+        }
+        .service-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: brightness(1.3) hue-shift(20deg);
+        }
+        .service-card h3 {
+            color: #bb86fc;
+            font-size: 24px;
+        }
+        #contact {
+            background: #161625;
+        }
+        footer {
+            background: #0a0a15;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid #bb86fc;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 45px; }
+            nav a { margin: 0 12px; font-size: 15px; }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>🎮 Super Online Oyun Portalı</h1>
-        <nav id="menu">
-            <button onclick="loadGame('space')">Uzay Shooter</button>
-            <button onclick="loadGame('car')">Araba Yarışı</button>
-            <button onclick="loadGame('pong')">Pong</button>
-            <button onclick="loadGame('snake')">Yılan</button>
-            <button onclick="loadGame('breakout')">Breakout</button>
-            <button onclick="loadGame('dodge')">Top Kaçışı</button>
+        <div class="logo">
+            <!-- LOGO BURAYA EKLE: Kendi logo resmini "logo.png" olarak koy veya src'yi değiştir (örneğin images/logo.png) -->
+            <img src="logo.png" alt="Nova Online Logo">
+        </div>
+        <nav>
+            <a href="#home">Ana Sayfa</a>
+            <a href="#services">Hizmetler</a>
+            <a href="#about">Hakkımızda</a>
+            <a href="#contact">İletişim</a>
         </nav>
     </header>
 
-    <div id="gameContainer">
-        <canvas id="canvas" width="800" height="500"></canvas>
-    </div>
+    <section id="home">
+        <div class="hero">
+            <h1>Nova Online</h1>
+            <p>Profesyonel web tasarım, kodlama ve grafik hizmetleri ile dijital dünyada fark yaratın.</p>
+            <button class="btn" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'});">Hizmetleri İncele</button>
+        </div>
+    </section>
 
-    <div id="info">Yön tuşları / Fare / Klavye ile kontroller sağlanır.</div>
+    <section id="services">
+        <h2>Hizmetlerimiz</h2>
+        <p>Size en iyi çözümleri sunuyoruz.</p>
+        <div class="services-grid">
+            <div class="service-card">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/006/389/344/small/purple-black-vs-logo-letter-design-vector.jpg" alt="Logo Tasarım">
+                <h3>Logo Tasarım</h3>
+                <p>Markanıza özel modern ve etkileyici logolar tasarlıyoruz.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://4kwallpapers.com/images/wallpapers/python-logo-purple-2880x1800-16084.jpg" alt="Python Kodlama">
+                <h3>Python Kodlama</h3>
+                <p>Web uygulamaları, otomasyon ve veri analizi için Python çözümleri.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://www.therevisionist.org/wp-content/uploads/2016/07/Coffee-Cup-of-Java-glowing-extra-extra-purple-beans-green-letters-8-3-Java-Using-Constructors-to-Construct-Objects.png" alt="Java Kodlama">
+                <h3>Java Kodlama</h3>
+                <p>Güçlü ve ölçeklenebilir Java uygulamaları geliştiriyoruz.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://cdn.vectorstock.com/i/1000v/51/46/java-php-css-html-code-icons-vector-30385146.jpg" alt="HTML/CSS Kodlama">
+                <h3>HTML & CSS Kodlama</h3>
+                <p>Modern, responsive ve şık web siteleri kodluyoruz.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/007/036/666/small/3d-black-purple-luxury-abstract-background-overlap-layers-on-dark-space-with-metallic-lines-effect-decoration-graphic-design-element-future-style-concept-for-flyer-banner-brochure-or-landing-page-vector.jpg" alt="Banner Tasarım">
+                <h3>Banner Tasarım</h3>
+                <p>Sosyal medya ve web için dikkat çekici banner'lar hazırlıyoruz.</p>
+            </div>
+            <div class="service-card">
+                <img src="https://img.freepik.com/free-vector/top-view-dark-laptop-background-template_52683-7080.jpg" alt="Tam Web Geliştirme">
+                <h3>Tam Web Geliştirme</h3>
+                <p>Sıfırdan profesyonel web siteleri ve uygulamalar.</p>
+            </div>
+        </div>
+    </section>
 
-    <script>
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        let currentGame = null;
-        let gameLoop = null;
+    <section id="about">
+        <h2>Hakkımızda</h2>
+        <p>Nova Online olarak yılların deneyimiyle dijital dünyada kaliteli hizmet sunuyoruz. Müşteri memnuniyeti bizim için her şeyden önemli.</p>
+    </section>
 
-        function clearLoop() {
-            if (gameLoop) {
-                cancelAnimationFrame(gameLoop);
-                gameLoop = null;
-            }
-        }
+    <section id="contact">
+        <h2>İletişim</h2>
+        <p>Bize ulaşmak için aşağıdaki numarayı arayabilirsiniz:</p>
+        <p style="font-size: 28px; color: #bb86fc;">
+            <a href="tel:05456887977" style="color: #bb86fc; text-decoration: none;">0545 688 79 77</a>
+        </p>
+        <button class="btn" onclick="location.href='tel:05456887977'">Hemen Ara</button>
+    </section>
 
-        /* ---------- UZAY SHOOTER ---------- */
-        function startSpaceShooter() {
-            clearLoop();
-            const player = { x: 380, y: 450, w: 40, h: 30, speed: 6 };
-            const bullets = [];
-            const enemies = [];
-            const enemySpeed = 2;
-            let left = false, right = false, space = false;
-            let score = 0;
+    <footer>
+        <p>&copy; 2026 Nova Online. Tüm hakları saklıdır.</p>
+    </footer>
 
-            function draw() {
-                ctx.fillStyle = "#000";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Player
-                ctx.fillStyle = "#0ff";
-                ctx.fillRect(player.x, player.y, player.w, player.h);
-                // Bullets
-                ctx.fillStyle = "#ff0";
-                bullets.forEach(b => ctx.fillRect(b.x, b.y, 4, 10));
-                // Enemies
-                ctx.fillStyle = "#f00";
-                enemies.forEach(e => ctx.fillRect(e.x, e.y, 30, 30));
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "20px sans-serif";
-                ctx.fillText("Skor: " + score, 10, 25);
-            }
-
-            function update() {
-                if (left && player.x > 0) player.x -= player.speed;
-                if (right && player.x < canvas.width - player.w) player.x += player.speed;
-                // Bullets move
-                for (let i = bullets.length - 1; i >= 0; i--) {
-                    bullets[i].y -= 8;
-                    if (bullets[i].y < 0) bullets.splice(i, 1);
-                }
-                // Enemies move
-                for (let i = enemies.length - 1; i >= 0; i--) {
-                    enemies[i].y += enemySpeed;
-                    if (enemies[i].y > canvas.height) enemies.splice(i, 1);
-                }
-                // Spawn enemy
-                if (Math.random() < 0.02) enemies.push({ x: Math.random() * (canvas.width - 30), y: -30 });
-                // Collisions
-                for (let i = bullets.length - 1; i >= 0; i--) {
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        const b = bullets[i], e = enemies[j];
-                        if (b.x < e.x + 30 && b.x + 4 > e.x && b.y < e.y + 30 && b.y + 10 > e.y) {
-                            bullets.splice(i, 1);
-                            enemies.splice(j, 1);
-                            score++;
-                            break;
-                        }
-                    }
-                }
-                // Game over check
-                for (let e of enemies) {
-                    if (e.y + 30 >= player.y && e.x < player.x + player.w && e.x + 30 > player.x) {
-                        alert("Oyun Bitti! Skor: " + score);
-                        clearLoop();
-                        return;
-                    }
-                }
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            window.onkeydown = e => {
-                if (e.code === "ArrowLeft") left = true;
-                if (e.code === "ArrowRight") right = true;
-                if (e.code === "Space") {
-                    if (!space) {
-                        bullets.push({ x: player.x + player.w / 2 - 2, y: player.y });
-                        space = true;
-                    }
-                }
-            };
-            window.onkeyup = e => {
-                if (e.code === "ArrowLeft") left = false;
-                if (e.code === "ArrowRight") right = false;
-                if (e.code === "Space") space = false;
-            };
-            update();
-        }
-
-        /* ---------- ARABA YARIŞI ---------- */
-        function startCarRace() {
-            clearLoop();
-            const road = { x: 0, y: 0, w: 300, h: canvas.height };
-            const car = { x: road.x + road.w / 2 - 15, y: canvas.height - 100, w: 30, h: 50 };
-            const traffic = [];
-            let score = 0;
-            let keys = {};
-
-            function draw() {
-                ctx.fillStyle = "#222";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Road
-                ctx.fillStyle = "#444";
-                ctx.fillRect(road.x, road.y, road.w, road.h);
-                // Lines
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 4;
-                ctx.setLineDash([20, 20]);
-                ctx.beginPath();
-                ctx.moveTo(road.x + road.w / 2, 0);
-                ctx.lineTo(road.x + road.w / 2, canvas.height);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                // Car
-                ctx.fillStyle = "#00f";
-                ctx.fillRect(car.x, car.y, car.w, car.h);
-                // Traffic
-                ctx.fillStyle = "#f00";
-                traffic.forEach(t => ctx.fillRect(t.x, t.y, t.w, t.h));
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "18px sans-serif";
-                ctx.fillText("Skor: " + score, 10, 25);
-            }
-
-            function update() {
-                // Controls
-                if (keys["ArrowLeft"] && car.x > road.x) car.x -= 5;
-                if (keys["ArrowRight"] && car.x < road.x + road.w - car.w) car.x += 5;
-                // Move traffic
-                for (let i = traffic.length - 1; i >= 0; i--) {
-                    traffic[i].y += 4;
-                    if (traffic[i].y > canvas.height) {
-                        traffic.splice(i, 1);
-                        score++;
-                    }
-                }
-                // Spawn
-                if (Math.random() < 0.02) {
-                    const lanes = [road.x + 20, road.x + road.w - 50];
-                    traffic.push({ x: lanes[Math.floor(Math.random() * lanes.length)], y: -50, w: 30, h: 50 });
-                }
-                // Collision
-                for (let t of traffic) {
-                    if (!(car.x > t.x + t.w || car.x + car.w < t.x || car.y > t.y + t.h || car.y + car.h < t.y)) {
-                        alert("Çarpışma! Skor: " + score);
-                        clearLoop();
-                        return;
-                    }
-                }
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            window.onkeydown = e => keys[e.code] = true;
-            window.onkeyup = e => keys[e.code] = false;
-            update();
-        }
-
-        /* ---------- PONG ---------- */
-        function startPong() {
-            clearLoop();
-            const paddle = (x, y) => ({ x, y, w: 100, h: 12, score: 0 });
-            const pad1 = paddle(canvas.width / 2 - 50, 20);
-            const pad2 = paddle(canvas.width / 2 - 50, canvas.height - 32);
-            const ball = { x: canvas.width / 2, y: canvas.height / 2, r: 8, dx: 4, dy: 4 };
-            let keys = {};
-
-            function draw() {
-                ctx.fillStyle = "#000";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Paddles
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(pad1.x, pad1.y, pad1.w, pad1.h);
-                ctx.fillRect(pad2.x, pad2.y, pad2.w, pad2.h);
-                // Ball
-                ctx.beginPath();
-                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-                ctx.fill();
-                // Scores
-                ctx.font = "24px sans-serif";
-                ctx.fillText(pad1.score, 30, 30);
-                ctx.fillText(pad2.score, canvas.width - 40, canvas.height - 10);
-            }
-
-            function update() {
-                // Paddle controls
-                if (keys["a"] && pad1.x > 0) pad1.x -= 6;
-                if (keys["d"] && pad1.x < canvas.width - pad1.w) pad1.x += 6;
-                if (keys["ArrowLeft"] && pad2.x > 0) pad2.x -= 6;
-                if (keys["ArrowRight"] && pad2.x < canvas.width - pad2.w) pad2.x += 6;
-                // Ball move
-                ball.x += ball.dx;
-                ball.y += ball.dy;
-                // Walls
-                if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) ball.dx *= -1;
-                // Paddles
-                if (ball.y - ball.r < pad1.y + pad1.h && ball.x > pad1.x && ball.x < pad1.x + pad1.w) ball.dy = Math.abs(ball.dy);
-                if (ball.y + ball.r > pad2.y && ball.x > pad2.x && ball.x < pad2.x + pad2.w) ball.dy = -Math.abs(ball.dy);
-                // Score
-                if (ball.y < 0) { pad2.score++; resetBall(); }
-                if (ball.y > canvas.height) { pad1.score++; resetBall(); }
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            function resetBall() {
-                ball.x = canvas.width / 2;
-                ball.y = canvas.height / 2;
-                ball.dx = (Math.random() > 0.5 ? 1 : -1) * 4;
-                ball.dy = (Math.random() > 0.5 ? 1 : -1) * 4;
-            }
-
-            window.onkeydown = e => keys[e.code] = true;
-            window.onkeyup = e => keys[e.code] = false;
-            update();
-        }
-
-        /* ---------- YILAN ---------- */
-        function startSnake() {
-            clearLoop();
-            const grid = 20;
-            let snake = [{ x: 10, y: 10 }];
-            let dx = 0, dy = 0;
-            let food = { x: 15, y: 15 };
-            let score = 0;
-
-            function draw() {
-                ctx.fillStyle = "#111";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Snake
-                ctx.fillStyle = "#0f0";
-                snake.forEach(s => ctx.fillRect(s.x * grid, s.y * grid, grid, grid));
-                // Food
-                ctx.fillStyle = "#f00";
-                ctx.fillRect(food.x * grid, food.y * grid, grid, grid);
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "20px sans-serif";
-                ctx.fillText("Skor: " + score, 10, 25);
-            }
-
-            function update() {
-                if (dx === 0 && dy === 0) {
-                    draw();
-                    gameLoop = requestAnimationFrame(update);
-                    return;
-                }
-                const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-                // Walls
-                if (head.x < 0 || head.x >= canvas.width / grid || head.y < 0 || head.y >= canvas.height / grid) {
-                    alert("Duvara çarptın! Skor: " + score);
-                    clearLoop();
-                    return;
-                }
-                // Self
-                for (let s of snake) {
-                    if (head.x === s.x && head.y === s.y) {
-                        alert("Kendine çarptın! Skor: " + score);
-                        clearLoop();
-                        return;
-                    }
-                }
-                snake.unshift(head);
-                // Food
-                if (head.x === food.x && head.y === food.y) {
-                    score++;
-                    food = { x: Math.floor(Math.random() * (canvas.width / grid)), y: Math.floor(Math.random() * (canvas.height / grid)) };
-                } else {
-                    snake.pop();
-                }
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            window.onkeydown = e => {
-                if (e.code === "ArrowUp" && dy === 0) { dx = 0; dy = -1; }
-                if (e.code === "ArrowDown" && dy === 0) { dx = 0; dy = 1; }
-                if (e.code === "ArrowLeft" && dx === 0) { dx = -1; dy = 0; }
-                if (e.code === "ArrowRight" && dx === 0) { dx = 1; dy = 0; }
-            };
-            update();
-        }
-
-        /* ---------- BREAKOUT ---------- */
-        function startBreakout() {
-            clearLoop();
-            const paddle = { x: canvas.width / 2 - 50, y: canvas.height - 30, w: 100, h: 12 };
-            const ball = { x: canvas.width / 2, y: canvas.height / 2, r: 8, dx: 4, dy: -4 };
-            const bricks = [];
-            const brickRows = 5, brickCols = 10, brickW = 70, brickH = 20, brickPad = 5, offsetTop = 30, offsetLeft = 35;
-            for (let r = 0; r < brickRows; r++) {
-                for (let c = 0; c < brickCols; c++) {
-                    bricks.push({ x: offsetLeft + c * (brickW + brickPad), y: offsetTop + r * (brickH + brickPad), w: brickW, h: brickH, alive: true });
-                }
-            }
-            let score = 0;
-            let keys = {};
-
-            function draw() {
-                ctx.fillStyle = "#000";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Paddle
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
-                // Ball
-                ctx.beginPath();
-                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-                ctx.fill();
-                // Bricks
-                ctx.fillStyle = "#f80";
-                bricks.forEach(b => { if (b.alive) ctx.fillRect(b.x, b.y, b.w, b.h); });
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "18px sans-serif";
-                ctx.fillText("Skor: " + score, 10, 20);
-            }
-
-            function update() {
-                // Paddle
-                if (keys["ArrowLeft"] && paddle.x > 0) paddle.x -= 6;
-                if (keys["ArrowRight"] && paddle.x < canvas.width - paddle.w) paddle.x += 6;
-                // Ball
-                ball.x += ball.dx;
-                ball.y += ball.dy;
-                if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) ball.dx *= -1;
-                if (ball.y - ball.r < 0) ball.dy *= -1;
-                if (ball.y + ball.r > canvas.height) {
-                    alert("Top düştü! Skor: " + score);
-                    clearLoop();
-                    return;
-                }
-                // Paddle hit
-                if (ball.y + ball.r > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.w) ball.dy = -Math.abs(ball.dy);
-                // Bricks
-                for (let b of bricks) {
-                    if (b.alive && ball.x > b.x && ball.x < b.x + b.w && ball.y > b.y && ball.y < b.y + b.h) {
-                        b.alive = false;
-                        ball.dy *= -1;
-                        score++;
-                    }
-                }
-                // Win
-                if (bricks.every(b => !b.alive)) {
-                    alert("Tebrikler! Tüm tuğları kırdın. Skor: " + score);
-                    clearLoop();
-                    return;
-                }
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            window.onkeydown = e => keys[e.code] = true;
-            window.onkeyup = e => keys[e.code] = false;
-            update();
-        }
-
-        /* ---------- TOP KAÇIŞI ---------- */
-        function startDodge() {
-            clearLoop();
-            const player = { x: canvas.width / 2, y: canvas.height / 2, r: 10 };
-            const balls = [];
-            let score = 0;
-            let mouse = { x: player.x, y: player.y };
-
-            function draw() {
-                ctx.fillStyle = "#000";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Player
-                ctx.fillStyle = "#0f0";
-                ctx.beginPath();
-                ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2);
-                ctx.fill();
-                // Enemy balls
-                ctx.fillStyle = "#f00";
-                balls.forEach(b => {
-                    ctx.beginPath();
-                    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-                // Score
-                ctx.fillStyle = "#fff";
-                ctx.font = "20px sans-serif";
-                ctx.fillText("Skor: " + score, 10, 25);
-            }
-
-            function update() {
-                // Player follow mouse
-                const dx = mouse.x - player.x, dy = mouse.y - player.y, dist = Math.hypot(dx, dy);
-                if (dist > 1) {
-                    player.x += (dx / dist) * 5;
-                    player.y += (dy / dist) * 5;
-                }
-                // Enemy balls
-                for (let i = balls.length - 1; i >= 0; i--) {
-                    const b = balls[i];
-                    b.x += b.dx;
-                    b.y += b.dy;
-                    if (b.x - b.r < 0 || b.x + b.r > canvas.width) b.dx *= -1;
-                    if (b.y - b.r < 0 || b.y + b.r > canvas.height) b.dy *= -1;
-                    // Collision
-                    if (Math.hypot(b.x - player.x, b.y - player.y) < b.r + player.r) {
-                        alert("Çarptın! Skor: " + score);
-                        clearLoop();
-                        return;
-                    }
-                }
-                // Spawn
-                if (Math.random() < 0.02) {
-                    const r = 8 + Math.random() * 8;
-                    const side = Math.floor(Math.random() * 4);
-                    let x, y, dx, dy;
-                    if (side === 0) { x = -r; y = Math.random() * canvas.height; dx = 2 + Math.random() * 2; dy = (Math.random() - 0.5) * 2; }
-                    if (side === 1) { x = canvas.width + r; y = Math.random() * canvas.height; dx = -(2 + Math.random() * 2); dy = (Math.random() - 0.5) * 2; }
-                    if (side === 2) { x = Math.random() * canvas.width; y = -r; dx = (Math.random() - 0.5) * 2; dy = 2 + Math.random() * 2; }
-                    if (side === 3) { x = Math.random() * canvas.width; y = canvas.height + r; dx = (Math.random() - 0.5) * 2; dy = -(2 + Math.random() * 2); }
-                    balls.push({ x, y, r, dx, dy });
-                }
-                score++;
-                draw();
-                gameLoop = requestAnimationFrame(update);
-            }
-
-            canvas.onmousemove = e => {
-                const rect = canvas.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-            };
-            update();
-        }
-
-        /* ---------- OYUN YÜKLEYİCİ ---------- */
-        function loadGame(name) {
-            clearLoop();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (name === "space") startSpaceShooter();
-            if (name === "car") startCarRace();
-            if (name === "pong") startPong();
-            if (name === "snake") startSnake();
-            if (name === "breakout") startBreakout();
-            if (name === "dodge") startDodge();
-        }
-
-        // Başlangıçta ilk oyun
-        loadGame("space");
-    </script>
 </body>
 </html>
